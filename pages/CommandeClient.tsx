@@ -371,12 +371,6 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         useEffect(() => {
             calculateOrderTotalsAsync();
         }, [calculateOrderTotalsAsync]);
-                order_type: orderType,
-                payment_method: paymentMethod,
-                status: 'pending',
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            };
 
             const updatedOrder = await applyPromotionsToOrder(tempOrder);
 
