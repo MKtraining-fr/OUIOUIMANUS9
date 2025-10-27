@@ -346,61 +346,39 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
             client_name: clientName,
             client_phone: clientPhone,
                 client_address: clientAddress,
-                shipping_cost: DOMICILIO_FEE, // Assurez-vous que DOMICILIO_FEE est défini ou récupéré ailleurs
-            };
-
-            const updatedOrder = await applyPromotionsToOrder(tempOrder);
-
-            let deliveryFee = 0;
-            if (orderType === 'delivery') {
-                const isFree = await checkFreeShipping(updatedOrder.total);
-                deliveryFee = isFree ? 0 : DOMICILIO_FEE;
-                updatedOrder.total += deliveryFee;
-            }
-
-            setOrderTotals({
-                subtotal: updatedOrder.subtotal,
-                total: updatedOrder.total,
-                automaticPromotionsDiscount: updatedOrder.total_discount,
-                promoCodeDiscount: updatedOrder.promo_code_discount ?? 0,
-                deliveryFee: deliveryFee,
-                appliedPromotions: updatedOrder.applied_promotions
-            });
-        }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod, DOMICILIO_FEE]);
-
-        useEffect(() => {
-            calculateOrderTotalsAsync();
-        }, [calculateOrderTotalsAsync]);
-
-            const updatedOrder = await applyPromotionsToOrder(tempOrder);
-
-            const totalDiscount = updatedOrder.total_discount || 0;
-            const currentPromoCodeDiscount = updatedOrder.applied_promotions.find(p => p.config?.promo_code === appliedPromoCode)?.discount_amount || 0;
-            const automaticPromotionsDiscount = totalDiscount - currentPromoCodeDiscount;
-
-            let deliveryFee = orderType === 'pedir_en_linea' ? DOMICILIO_FEE : 0;
-            const freeShippingPromotionApplied = updatedOrder.applied_promotions.some(p => p.type === 'FREE_SHIPPING');
-            if (freeShippingPromotionApplied) {
-                deliveryFee = 0;
-            }
-            setIsFreeShipping(freeShippingPromotionApplied);
-
-            // Le total final doit être calculé en utilisant le total de updatedOrder
-            // qui a déjà pris en compte toutes les promotions sauf les frais de livraison
-            const finalTotal = updatedOrder.total + deliveryFee;
-
-            setOrderTotals({
-                subtotal: initialSubtotal,
-                total: finalTotal,
-                automaticPromotionsDiscount,
-                promoCodeDiscount: currentPromoCodeDiscount,
-                deliveryFee,
-                appliedPromotions: updatedOrder.applied_promotions
-            });
+            shipping_cost: DOMICILIO_FEE, // Assurez-vous que DOMICILIO_FEE est défini ou récupéré ailleurs
         };
 
+        const updatedOrder = await applyPromotionsToOrder(tempOrder);
+
+        const totalDiscount = updatedOrder.total_discount || 0;
+        const currentPromoCodeDiscount = updatedOrder.applied_promotions.find(p => p.config?.promo_code === appliedPromoCode)?.discount_amount || 0;
+        const automaticPromotionsDiscount = totalDiscount - currentPromoCodeDiscount;
+
+        let deliveryFee = orderType === 'pedir_en_linea' ? DOMICILIO_FEE : 0;
+        const freeShippingPromotionApplied = updatedOrder.applied_promotions.some(p => p.type === 'FREE_SHIPPING');
+        if (freeShippingPromotionApplied) {
+            deliveryFee = 0;
+        }
+        setIsFreeShipping(freeShippingPromotionApplied);
+
+        // Le total final doit être calculé en utilisant le total de updatedOrder
+        // qui a déjà pris en compte toutes les promotions sauf les frais de livraison
+        const finalTotal = updatedOrder.total + deliveryFee;
+
+        setOrderTotals({
+            subtotal: initialSubtotal,
+            total: finalTotal,
+            automaticPromotionsDiscount,
+            promoCodeDiscount: currentPromoCodeDiscount,
+            deliveryFee,
+            appliedPromotions: updatedOrder.applied_promotions
+        });
+    }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod, DOMICILIO_FEE]);
+
+    useEffect(() => {
         calculateOrderTotalsAsync();
-    }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod, calculateOrderTotalsAsync]);
+    }, [calculateOrderTotalsAsync]);
 
     const { total, subtotal, promoCodeDiscount: currentPromoCodeDiscount, deliveryFee } = orderTotals;
 
