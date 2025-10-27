@@ -761,7 +761,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                         >
                                             <Trash2 size={16} />
                                         </button>
-                                        <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold border border-gray-300"
+                                        <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold border border-gray-300">
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, -1)}
                                                 className="rounded-full p-1 transition hover:bg-gray-200"
