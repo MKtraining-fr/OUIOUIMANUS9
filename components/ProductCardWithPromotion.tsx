@@ -60,6 +60,14 @@ const ProductCardWithPromotion: React.FC<ProductCardWithPromotionProps> = ({ pro
       {product.estado !== 'disponible' && (
         <span className="text-xs text-red-500 font-bold mt-1">Agotado</span>
       )}
+      {product.estado === 'disponible' && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onClick(); }}
+          className="mt-4 w-full rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 py-2 font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-orange-600 hover:via-orange-700 hover:to-red-700"
+        >
+          Agregar
+        </button>
+      )}
     </div>
   );
 };

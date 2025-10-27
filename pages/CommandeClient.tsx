@@ -726,17 +726,14 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="group relative mb-3 rounded-lg bg-white border border-gray-200 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
+                                className="group relative mb-3 rounded-lg bg-white border-2 border-orange-500 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1 space-y-2">
                                         <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-gray-900 break-words text-balance whitespace-normal [hyphens:auto]">
                                             {item?.nom_produit || 'Article inconnu'}
                                         </p>
-                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
-                                            <span className="font-semibold">Precio unitario: {formatCurrencyCOP(item.prix_unitaire)}</span>
-                                            <span className="font-semibold">Total: {formatCurrencyCOP(item.prix_unitaire * item.quantite)}</span>
-                                        </div>
+
                                         {item.commentaire && (
                                             <p className="text-sm text-gray-600 italic bg-gray-50 border-l-2 border-brand-primary/50 p-2 rounded">
                                                 💬 {item.commentaire}
@@ -749,13 +746,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                         )}
                                     </div>
                                     <div className="flex flex-col items-center gap-2">
-                                        <button
-                                            onClick={() => handleRemoveCartItem(item.id)}
-                                            className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600 shadow-lg"
-                                            aria-label="Eliminar artículo"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
+
                                         <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold border border-gray-300">
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, -1)}
