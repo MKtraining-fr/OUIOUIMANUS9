@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Product, Category, OrderItem, Order } from '../types';
 
@@ -320,7 +320,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
     });
 
     useEffect(() => {
-        const calculateOrderTotals = async () => {
+        const calculateOrderTotalsAsync = async () => {
             const initialSubtotal = cart.reduce((acc, item) => acc + item.quantite * item.prix_unitaire, 0);
 
             if (cart.length === 0) {
@@ -382,8 +382,8 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
             });
         };
 
-        calculateOrderTotals();
-    }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod]);
+        calculateOrderTotalsAsync();
+    }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod, calculateOrderTotalsAsync]);
 
     const { total, subtotal, promoCodeDiscount: currentPromoCodeDiscount, deliveryFee } = orderTotals;
 
@@ -398,7 +398,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         setModalOpen(true);
     };
 
-    const handleAddToCart = (item: OrderItem) => {
+    const handleAddToCart = useCallback((item: OrderItem) => {
         setCart(prevCart => {
             const existingIndex = prevCart.findIndex(existing =>
                 existing.produitRef === item.produitRef
@@ -423,11 +423,11 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         setModalOpen(false);
     };
 
-    const handleRemoveCartItem = (itemId: string) => {
+    const handleRemoveCartItem = useCallback((itemId: string) => {
         setCart(prevCart => prevCart.filter(item => item.id !== itemId));
     };
 
-    const handleCartItemQuantityChange = (itemId: string, delta: number) => {
+    const handleCartItemQuantityChange = useCallback((itemId: string, delta: number) => {
         // Annuler le timeout précédent pour cet item
         const existingTimeout = cartUpdateTimeouts.current.get(itemId);
         if (existingTimeout) {
@@ -731,24 +731,24 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="group relative mb-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 px-4 py-4 text-white shadow-lg transition-transform hover:-translate-y-0.5"
+                                className="group relative mb-3 rounded-lg bg-white border border-gray-200 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1 space-y-2">
-                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">
+                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-gray-900 break-words text-balance whitespace-normal [hyphens:auto]">
                                             {item?.nom_produit || 'Article inconnu'}
                                         </p>
-                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/90">
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
                                             <span className="font-semibold">Precio unitario: {formatCurrencyCOP(item.prix_unitaire)}</span>
                                             <span className="font-semibold">Total: {formatCurrencyCOP(item.prix_unitaire * item.quantite)}</span>
                                         </div>
                                         {item.commentaire && (
-                                            <p className="text-sm text-white/90 italic bg-white/15 border-l-2 border-white/60 p-2 rounded">
+                                            <p className="text-sm text-gray-600 italic bg-gray-50 border-l-2 border-brand-primary/50 p-2 rounded">
                                                 💬 {item.commentaire}
                                             </p>
                                         )}
                                         {item.excluded_ingredients && item.excluded_ingredients.length > 0 && (
-                                            <p className="text-sm text-white font-semibold bg-black/20 border-l-2 border-white/60 p-2 rounded">
+                                            <p className="text-sm text-gray-700 font-semibold bg-gray-50 border-l-2 border-red-500/50 p-2 rounded"
                                                 🚫 Sin: {item.excluded_ingredients.join(', ')}
                                             </p>
                                         )}
@@ -756,23 +756,23 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                     <div className="flex flex-col items-center gap-2">
                                         <button
                                             onClick={() => handleRemoveCartItem(item.id)}
-                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
+                                            className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600 shadow-lg"
                                             aria-label="Eliminar artículo"
                                         >
-                                            <Trash2 size={20} />
+                                            <Trash2 size={16} />
                                         </button>
-                                        <div className="flex items-center gap-2 rounded-full bg-white/15 px-2 py-1 text-xs font-semibold">
+                                        <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold border border-gray-300"
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, -1)}
-                                                className="rounded-full p-1 transition hover:bg-white/20"
+                                                className="rounded-full p-1 transition hover:bg-gray-200"
                                                 aria-label="Disminuir cantidad"
                                             >
                                                 <Minus size={14} />
                                             </button>
-                                            <span className="min-w-[1.5rem] text-center text-sm">{item.quantite}</span>
+                                            <span className="min-w-[1.5rem] text-center text-base font-bold">{item.quantite}</span>
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, 1)}
-                                                className="rounded-full p-1 transition hover:bg-white/20"
+                                                className="rounded-full p-1 transition hover:bg-gray-200"
                                                 aria-label="Aumentar cantidad"
                                             >
                                                 <Plus size={14} />
@@ -877,7 +877,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                     )}
                     <div className="flex justify-between items-center mb-3">
                         <p className="text-lg font-bold text-gray-800">Total:</p>
-                        <p className="text-xl font-bold text-brand-primary">{formatCurrencyCOP(total)}</p>
+                        <p className="text-3xl font-bold text-brand-primary">{formatCurrencyCOP(total)}</p>
                     </div>
 
                     <form onSubmit={handleSubmitOrder} className="space-y-4">

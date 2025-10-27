@@ -48,7 +48,7 @@ const PromotionBadge: React.FC<PromotionBadgeProps> = ({ promotion, className = 
 
   return (
     <div
-      className={`px-2 py-0.5 rounded-full font-bold text-xs shadow-md ${className}`}
+      className={`px-2 py-0.5 rounded-full font-bold text-xs shadow-sm border border-white/50 ${className}`}
       style={{
         backgroundColor: backgroundImage ? 'transparent' : bgColor,
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',

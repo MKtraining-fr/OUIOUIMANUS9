@@ -36,18 +36,18 @@ const ProductCardWithPromotion: React.FC<ProductCardWithPromotionProps> = ({ pro
       <img 
         src={product.image} 
         alt={product.nom_produit} 
-        className="w-36 h-36 md:w-40 md:h-40 object-cover rounded-xl mb-4" 
+        className="w-full h-36 object-cover rounded-xl mb-4 aspect-4/3" 
       />
       
       {/* Nom du produit */}
       <p
-        className="font-semibold flex-grow text-black leading-snug text-[clamp(1.05rem,2.4vw,1.3rem)] break-words text-balance whitespace-normal [hyphens:auto]"
+        className="font-extrabold flex-grow text-black leading-snug text-[clamp(1rem,2.2vw,1.2rem)] break-words text-balance whitespace-normal [hyphens:auto] tracking-tight"
       >
         {product.nom_produit}
       </p>
 
       {/* Description */}
-      <p className="text-base text-black mt-2 px-1 max-h-20 overflow-hidden">
+      <p className="text-sm text-gray-600 mt-2 px-1 max-h-10 overflow-hidden line-clamp-2">
         {product.description}
       </p>
 
