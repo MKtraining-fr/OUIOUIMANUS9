@@ -452,7 +452,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         }, 300);
 
         cartUpdateTimeouts.current.set(itemId, timeout);
-    };
+    }, [setCart]);
 
     const handleReorder = (order: Order) => {
         const itemsToReorder = order.items.filter(item => !isDeliveryFeeItem(item));
