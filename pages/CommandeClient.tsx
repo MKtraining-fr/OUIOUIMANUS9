@@ -319,7 +319,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         appliedPromotions: []
     });
 
-    const calculateOrderTotalsAsync = useCallback(async () => {
+    const const calculateOrderTotalsAsync = useCallback(async () => {
         const initialSubtotal = cart.reduce((acc, item) => acc + item.quantite * item.prix_unitaire, 0);
 
         if (cart.length === 0) {
