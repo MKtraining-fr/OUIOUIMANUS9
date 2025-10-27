@@ -398,7 +398,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         setModalOpen(true);
     };
 
-    const handleAddToCart = (item: OrderItem) => {
+    const handleAddToCart = useCallback((item: OrderItem) => {
         setCart(prevCart => {
             const existingIndex = prevCart.findIndex(existing =>
                 existing.produitRef === item.produitRef
@@ -421,13 +421,13 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
             return [...prevCart, item];
         });
         setModalOpen(false);
-    };
+    }, [setCart, setModalOpen]);
 
-    const handleRemoveCartItem = (itemId: string) => {
+    const handleRemoveCartItem = useCallback((itemId: string) => {
         setCart(prevCart => prevCart.filter(item => item.id !== itemId));
-    };
+    }, [setCart]);
 
-    const handleCartItemQuantityChange = (itemId: string, delta: number) => {
+    const handleCartItemQuantityChange = useCallback((itemId: string, delta: number) => {
         // Annuler le timeout précédent pour cet item
         const existingTimeout = cartUpdateTimeouts.current.get(itemId);
         if (existingTimeout) {
