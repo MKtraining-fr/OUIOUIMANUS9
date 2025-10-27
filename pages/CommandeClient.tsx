@@ -421,11 +421,11 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
             return [...prevCart, item];
         });
         setModalOpen(false);
-    };
+    }, [setCart, setModalOpen]);
 
     const handleRemoveCartItem = useCallback((itemId: string) => {
         setCart(prevCart => prevCart.filter(item => item.id !== itemId));
-    };
+    }, [setCart]);
 
     const handleCartItemQuantityChange = useCallback((itemId: string, delta: number) => {
         // Annuler le timeout précédent pour cet item
