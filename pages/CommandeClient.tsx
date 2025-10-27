@@ -319,35 +319,58 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         appliedPromotions: []
     });
 
-    useEffect(() => {
-        const calculateOrderTotalsAsync = async () => {
-            const initialSubtotal = cart.reduce((acc, item) => acc + item.quantite * item.prix_unitaire, 0);
+    const calculateOrderTotalsAsync = useCallback(async () => {
+        const initialSubtotal = cart.reduce((acc, item) => acc + item.quantite * item.prix_unitaire, 0);
 
-            if (cart.length === 0) {
-                setOrderTotals({
-                    subtotal: 0,
-                    total: 0,
-                    automaticPromotionsDiscount: 0,
-                    promoCodeDiscount: 0,
-                    deliveryFee: 0,
-                    appliedPromotions: []
-                });
-                setIsFreeShipping(false);
-                return;
-            }
+        if (cart.length === 0) {
+            setOrderTotals({
+                subtotal: 0,
+                total: 0,
+                automaticPromotionsDiscount: 0,
+                promoCodeDiscount: 0,
+                deliveryFee: 0,
+                appliedPromotions: []
+            });
+            setIsFreeShipping(false);
+            return;
+        }
 
-            const tempOrder: Order = {
-                id: 'temp',
-                items: cart,
-                subtotal: initialSubtotal,
-                total: initialSubtotal,
-                total_discount: 0,
-                applied_promotions: [],
-                promo_code: appliedPromoCode || undefined,
-                client_name: clientName,
-                client_phone: clientPhone,
+        const tempOrder: Order = {
+            id: 'temp',
+            items: cart,
+            subtotal: initialSubtotal,
+            total: initialSubtotal,
+            total_discount: 0,
+            applied_promotions: [],
+            promo_code: appliedPromoCode || undefined,
+            client_name: clientName,
+            client_phone: clientPhone,
                 client_address: clientAddress,
                 shipping_cost: DOMICILIO_FEE, // Assurez-vous que DOMICILIO_FEE est défini ou récupéré ailleurs
+            };
+
+            const updatedOrder = await applyPromotionsToOrder(tempOrder);
+
+            let deliveryFee = 0;
+            if (orderType === 'delivery') {
+                const isFree = await checkFreeShipping(updatedOrder.total);
+                deliveryFee = isFree ? 0 : DOMICILIO_FEE;
+                updatedOrder.total += deliveryFee;
+            }
+
+            setOrderTotals({
+                subtotal: updatedOrder.subtotal,
+                total: updatedOrder.total,
+                automaticPromotionsDiscount: updatedOrder.total_discount,
+                promoCodeDiscount: updatedOrder.promo_code_discount ?? 0,
+                deliveryFee: deliveryFee,
+                appliedPromotions: updatedOrder.applied_promotions
+            });
+        }, [cart, appliedPromoCode, orderType, clientName, clientPhone, clientAddress, paymentMethod, DOMICILIO_FEE]);
+
+        useEffect(() => {
+            calculateOrderTotalsAsync();
+        }, [calculateOrderTotalsAsync]);
                 order_type: orderType,
                 payment_method: paymentMethod,
                 status: 'pending',
