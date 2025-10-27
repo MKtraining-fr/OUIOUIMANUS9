@@ -748,8 +748,8 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                             </p>
                                         )}
                                         {item.excluded_ingredients && item.excluded_ingredients.length > 0 && (
-                                            <p className="text-sm text-gray-700 font-semibold bg-gray-50 border-l-2 border-red-500/50 p-2 rounded"
-                                                🚫 Sin: {item.excluded_ingredients.join(', ')}
+                                              <p className="text-sm text-gray-700 font-semibold bg-gray-50 border-l-2 border-red-500/50 p-2 rounded">
+                                                  🚫 Sin: {item.excluded_ingredients.join(', ')}
                                             </p>
                                         )}
                                     </div>
