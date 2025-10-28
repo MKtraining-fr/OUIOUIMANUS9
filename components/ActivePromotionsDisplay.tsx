@@ -101,21 +101,21 @@ const ActivePromotionsDisplay: React.FC = () => {
           return (
             <div
               key={promo.id}
-              className="flex items-start p-2 rounded-lg shadow-sm border-l-4 transition-transform hover:scale-[1.01]"
+              className="flex items-start p-1 rounded-lg shadow-sm border-l-4 transition-transform hover:scale-[1.01]"
               style={{
                 borderLeftColor: bgColor,
                 background: `linear-gradient(to right, ${bgColor}15, white)`,
               }}
             >
               <div
-                className="flex items-center justify-center w-8 h-8 rounded-full mr-2 flex-shrink-0"
+                className="flex items-center justify-center w-6 h-6 rounded-full mr-2 flex-shrink-0"
                 style={{ backgroundColor: bgColor, color: promo.visuals?.badge_color || '#FFFFFF' }}
               >
                 {getPromotionIcon(promo)}
               </div>
               <div className="flex-1">
-                <p className="font-bold text-gray-900 text-sm">{promo.name}</p>
-                <p className="text-xs text-gray-600">{getPromotionDescription(promo)}</p>
+                <p className="font-bold text-gray-900 text-xs">{promo.name}</p>
+                <p className="text-xs text-gray-600 truncate">{getPromotionDescription(promo)}</p>
               </div>
             </div>
           );
