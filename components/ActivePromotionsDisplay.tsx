@@ -100,7 +100,7 @@ const ActivePromotionsDisplay: React.FC = () => {
           // Sinon, afficher le format compact habituel
           return (
                      <div
-                className="flex items-start rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden"verflow-hidden"01]"
+                  className="flex items-start rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden"
               style={{
                 borderLeftColor: bgColor,
                 background: `linear-gradient(to right, ${bgColor}15, white)`,
