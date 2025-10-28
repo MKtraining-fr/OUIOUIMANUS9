@@ -110,7 +110,7 @@ const ActivePromotionsDisplay: React.FC = () => {
                 className="flex items-center justify-center w-10 h-10 flex-shrink-0"       style={{ backgroundColor: bgColor, color: promo.visuals?.badge_color || '#FFFFFF' }}
               >
                 {getPromotionIcon(promo)}
-                </div>              <div className="flex-1 px-2 py-1"
+                </div>              <div className="flex-1 px-2 py-1">
                 <p className="font-bold text-gray-900 text-xs">{promo.name}</p>
                 <p className="text-xs text-gray-600 truncate">{getPromotionDescription(promo)}</p>
               </div>
