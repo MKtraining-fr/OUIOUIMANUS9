@@ -726,7 +726,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="group relative mb-3 rounded-lg bg-white border-2 border-orange-500 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
+                                className="group relative mb-3 rounded-lg bg-orange-500/10 border-2 border-orange-500 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1 space-y-2">
