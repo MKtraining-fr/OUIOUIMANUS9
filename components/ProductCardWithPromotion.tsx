@@ -53,7 +53,7 @@ const ProductCardWithPromotion: React.FC<ProductCardWithPromotionProps> = ({ pro
 
       {/* Prix */}
       <p className="font-bold text-lg text-gray-800 mt-2">
-        {formatCurrencyCOP(product.prix_venta)}
+        {formatCurrencyCOP(product.prix_vente)}
       </p>
       
       {/* Statut */}
