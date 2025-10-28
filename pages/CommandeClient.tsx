@@ -699,7 +699,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                         <div key={order.id} className="flex justify-between items-center bg-white p-2 rounded border border-gray-200 hover:border-yellow-500 transition-all">
                                             <div className="flex-1 min-w-0">
                                                 <p className="text-xs font-bold text-gray-800 truncate">Pedido del {orderDate}</p>
-                                                <p className="text-xs text-gray-600">
+                                                <p className="text-xs text-white/80">
                                                     {itemCount} article{itemCount > 1 ? 's' : ''} • {formatCurrencyCOP(order.total)}
                                                 </p>
                                             </div>
@@ -726,11 +726,11 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                         {cart.map((item) => (
                             <div
                                 key={item.id}
-                                className="group relative mb-3 rounded-lg bg-orange-500/10 border-2 border-orange-500 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
+                                className="group relative mb-3 rounded-lg bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 border-2 border-orange-500 px-4 py-4 text-white shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1 space-y-2">
-                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-gray-900 break-words text-balance whitespace-normal [hyphens:auto]">
+                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">
                                             {item?.nom_produit || 'Article inconnu'}
                                         </p>
 
@@ -740,7 +740,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                             </p>
                                         )}
                                         {item.excluded_ingredients && item.excluded_ingredients.length > 0 && (
-                                              <p className="text-sm text-gray-700 font-semibold bg-gray-50 border-l-2 border-red-500/50 p-2 rounded">
+                                              <p className="text-sm text-white/90 font-semibold bg-white/20 border-l-2 border-white/50 p-2 rounded">
                                                   🚫 Sin: {item.excluded_ingredients.join(', ')}
                                             </p>
                                         )}
@@ -780,7 +780,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                 <p className="text-sm font-bold text-green-600">GRATIS</p>
                             </div>
                         ) : (
-                            <p className="text-sm text-gray-600">{formatCurrencyCOP(DOMICILIO_FEE)}</p>
+                            <p className="text-sm text-white/80">{formatCurrencyCOP(DOMICILIO_FEE)}</p>
                         )}
                     </div>
                 )}
