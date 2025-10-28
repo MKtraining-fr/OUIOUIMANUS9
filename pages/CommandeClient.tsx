@@ -729,9 +729,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                 className="group relative mb-3 rounded-lg bg-orange-500/10 border-2 border-orange-500 px-4 py-4 text-gray-800 shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
-                                    <div className="flex-1 space-y-2">
-                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-gray-900 break-words text-balance whitespace-normal [hyphens:auto]">
-                                            {item?.nom_produit || 'Article inconnu'}
+                                    <div className="flex-1 space-y-2">                                        <p className="font-extrabold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">                                          {item?.nom_produit || 'Article inconnu'}
                                         </p>
 
                                         {item.commentaire && (
