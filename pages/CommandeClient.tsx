@@ -730,7 +730,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                             >
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1 space-y-2">
-                                        <p className="font-bold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-gray-900 break-words text-balance whitespace-normal [hyphens:auto]">
+                                         <p className="font-extrabold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">">
                                             {item?.nom_produit || 'Article inconnu'}
                                         </p>
 
@@ -755,7 +755,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                             >
                                                 <Minus size={14} />
                                             </button>
-                                            <span className="min-w-[1.5rem] text-center text-base font-bold">{item.quantite}</span>
+                                            <span className="min-w-[1.5rem] text-center text-base font-extrabold text-white">{item.quantite}</span>
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, 1)}
                                                 className="rounded-full p-1 transition hover:bg-gray-200"
