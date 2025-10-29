@@ -4,11 +4,11 @@ import { Order } from '../types';
 import { CheckCircle, ChefHat, FileText, PackageCheck, User, MapPin, Receipt, Phone, Gift } from 'lucide-react';
 
 const PROMO_ICONS: { [key: string]: string } = {
-    "free_shipping": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/free_shipping.png",
-    "percentage": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/percentage.png",
-    "buy_x_get_y": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/buy_x_get_y.png",
-    "default": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/default.png",
-    "time_range": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/time_range.png",
+    "free_shipping": "https://res.cloudinary.com/dmed4shf3/image/upload/v1761748994/manus-promo-icons/free_shipping.svg",
+    "percentage": "https://res.cloudinary.com/dmed4shf3/image/upload/v1761748995/manus-promo-icons/percentage.svg",
+    "buy_x_get_y": "https://res.cloudinary.com/dmed4shf3/image/upload/v1761748996/manus-promo-icons/buy_x_get_y.svg",
+    "default": "https://res.cloudinary.com/dmed4shf3/image/upload/v1761748998/manus-promo-icons/default.svg",
+    "time_range": "https://res.cloudinary.com/dmed4shf3/image/upload/v1761748999/manus-promo-icons/time_range.svg",
 };
 import { formatCurrencyCOP } from '../utils/formatIntegerAmount';
 import {
