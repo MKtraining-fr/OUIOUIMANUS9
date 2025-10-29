@@ -397,9 +397,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             <h2 className="text-3xl font-bold text-center text-white sm:text-4xl">
                                 Commande #{order.id.slice(-6)}
                             </h2>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                                    <div className="grid grid-cols-2 gap-4 items-start pt-4">-3 sm:grid-cols-4">
                             {steps.map((step, index) => {
                                 const isActive = index === currentStep;
                                 const isFinalStep = index === steps.length - 1;
@@ -420,8 +418,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         key={step.name}
                                         className={cardClasses}
                                         aria-current={isActive ? 'step' : undefined}
-                                    >
-                                        <div className="flex flex-col items-center text-center gap-2 sm:gap-3">
+                                                                           <div className="flex flex-col items-center justify-center">ap-2 sm:gap-3">
                                             <p
                                                 className={`text-xs sm:text-sm font-semibold tracking-wide ${
                                                     isCompletedStep || isActive ? 'text-white' : 'text-white/70'
@@ -673,8 +670,8 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         return (
                                             <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 p-4 sm:p-5">
                                                 <div className="flex items-center justify-between gap-4">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4">
-                                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40">
+                                                      <div className="flex-1 min-w-0 flex items-center">lex-1 items-center gap-4">
+                                                            <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-white font-bold text-base flex-shrink-0">adow-inner shadow-black/40">
                                                                 {item.quantite}
                                                             </div>
                                                             <div className="min-w-0 flex-1 space-y-1">
@@ -712,8 +709,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 </div>
                             ) : null}
 
-                            {totalDiscount > 0 && (
-                                <div className="mt-5 flex items-center justify-between rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100">
+                            {totalDiscou                                    <div className="flex items-center justify-between p-3 rounded-lg bg-black/20 shadow-lg h-14">emerald-300/30 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100">
                                     <span>Réductions totales</span>
                                     <span>- {formatCurrencyCOP(totalDiscount)}</span>
                                 </div>
@@ -1218,7 +1214,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                 {isFreeShipping ? (
                                                     <div className="flex flex-col items-end">
                                                         <span className="text-xs text-gray-400 line-through">{formatCurrencyCOP(8000)}</span>
-                                                        <span className="text-sm font-bold text-green-600">GRATIS</span>
+                                                   <div className="text-white font-bold text-base flex-shrink-0 ml-4">>span>
                                                     </div>
                                                 ) : (
                                                     <span>{formatCurrencyCOP(item.prix_unitaire * item.quantite)}</span>
@@ -1289,8 +1285,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 <CheckCircle size={16} /> Pedido listo
                             </span>
                         </div>
-                    )}
-                    <div className="flex flex-col space-y-4">
+                                        <div className="flex flex-col space-y-2">4">
                         <p className={`text-sm ${variant === 'hero' ? 'text-gray-300' : 'text-gray-600'}`}>
                             Le statut de votre commande est mis à jour automatiquement.
                         </p>
