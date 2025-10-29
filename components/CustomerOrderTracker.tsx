@@ -284,8 +284,8 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     >
                         {getPromotionIcon(promotion)}
                     </div>                    <div className="flex-1 px-3 flex items-center justify-between h-7">
-                        <p className="font-bold text-white text-base">{promotion.name}</p>
-                        <span className="text-base font-bold text-emerald-300 whitespace-nowrap">
+                        <p className="font-bold text-white text-lg">{promotion.name}</p>
+                        <span className="text-lg font-bold text-white whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
@@ -612,18 +612,17 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-1 sm:px-5 sm:py-2">
+                                            <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
                                                 <div className="flex flex-col gap-4">
                                                     <div className="flex flex-wrap items-center justify-between gap-4">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-base font-semibold text-white shadow-inner shadow-black/40 sm:h-10 sm:w-10 sm:text-lg">
+                                                        <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
                                                             </span>
                                                             <div className="min-w-0 flex-1">
-                                                                <p className="text-base font-semibold text-white sm:text-lg">
+                                                                <p className="text-base font-semibold text-black sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
-                                                                {itemDescription && (
-                                                                    <p className="text-xs text-white/70">{itemDescription}</p>
+                                                                {itemDescription && (                                                                    <p className="text-xs text-gray-600">{item.commentaire}</p>
                                                                 )}
                                                                 {item.commentaire && (
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
