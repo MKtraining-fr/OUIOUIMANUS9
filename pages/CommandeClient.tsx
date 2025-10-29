@@ -729,7 +729,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                 className="group relative mb-3 rounded-lg bg-gradient-to-r from-orange-400 to-red-400 border-2 border-orange-500 px-4 py-4 text-white shadow-md transition-shadow hover:shadow-lg"
                             >
                                 <div className="flex items-start justify-between gap-3">
-                                    <div className="flex-1 space-y-2">                                        <p className="font-extrabold text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">                                          {item?.nom_produit || 'Article inconnu'}
+                                    <div className="flex-1 space-y-2">                                        <p className="text-[clamp(1rem,2vw,1.3rem)] leading-snug text-white break-words text-balance whitespace-normal [hyphens:auto]">                                          {item?.nom_produit || 'Article inconnu'}
                                         </p>
 
                                         {item.commentaire && (
@@ -745,7 +745,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                     </div>
                                     <div className="flex flex-col items-center gap-2">
 
-                                        <div className="flex items-center gap-2 rounded-full bg-gray-100 px-2 py-1 text-sm font-semibold border border-gray-300">
+                                        <div className="flex items-center gap-2 rounded-full bg-white px-2 py-1 text-sm font-semibold border border-gray-300 text-gray-800">
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, -1)}
                                                 className="rounded-full p-1 transition hover:bg-gray-200"
@@ -753,7 +753,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                                             >
                                                 <Minus size={14} />
                                             </button>
-                                            <span className="min-w-[1.5rem] text-center text-base font-bold">{item.quantite}</span>
+                                            <span className="min-w-[1.5rem] text-center text-base font-bold text-gray-800">{item.quantite}</span>
                                             <button
                                                 onClick={() => handleCartItemQuantityChange(item.id, 1)}
                                                 className="rounded-full p-1 transition hover:bg-gray-200"

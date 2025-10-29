@@ -100,7 +100,7 @@ const ActivePromotionsDisplay: React.FC = () => {
           // Sinon, afficher le format compact habituel
           return (
                      <div
-                  className="flex items-start rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden"
+                  className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden"
               style={{
                 borderLeftColor: bgColor,
                 background: `linear-gradient(to right, ${bgColor}15, white)`,
@@ -110,9 +110,9 @@ const ActivePromotionsDisplay: React.FC = () => {
                 className="flex items-center justify-center w-10 h-10 flex-shrink-0"       style={{ backgroundColor: bgColor, color: promo.visuals?.badge_color || '#FFFFFF' }}
               >
                 {getPromotionIcon(promo)}
-                </div>              <div className="flex-1 px-2 py-1">
-                <p className="font-bold text-gray-900 text-xs">{promo.name}</p>
-                <p className="text-xs text-gray-600 truncate">{getPromotionDescription(promo)}</p>
+                </div>              <div className="flex-1 px-2 py-1 flex items-center justify-between">
+                <p className="font-bold text-gray-900 text-sm">{promo.name}</p>
+                <p className="text-xs text-gray-600 truncate ml-2">{getPromotionDescription(promo)}</p>
               </div>
             </div>
           );
