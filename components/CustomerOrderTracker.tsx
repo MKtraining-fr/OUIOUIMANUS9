@@ -413,12 +413,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                     isCompletedStep || isActive ? 'text-white' : 'text-white/70'
                                 }`;
 
-                                return (
+                                   return (
                                     <div
                                         key={step.name}
                                         className={cardClasses}
-                                        aria-current={isActive ? 'step' : undefined}
-                                    <div className="flex flex-col items-center justify-center gap-2 sm:gap-3">
+                                        aria-current={isActive ? 'step' : undefined}>
+                                        <div className="flex flex-col items-center justify-center gap-2 sm:gap-3">
                                             <p
                                                 className={`text-xs sm:text-sm font-semibold tracking-wide ${
                                                     isCompletedStep || isActive ? 'text-white' : 'text-white/70'
