@@ -89,7 +89,9 @@ const calculatePercentageDiscount = (order: Order, discount: PromotionDiscount):
   const orderSubtotal = order.subtotal || order.total;
   
   if (discount.applies_to === 'total') {
-    applicableAmount = orderSubtotal;
+    // Si la promotion s'applique au total, nous utilisons le total actuel de la commande
+    // qui devrait être le sous-total ajusté par les promotions précédentes.
+    applicableAmount = order.total;
   } else if (discount.applies_to === 'products' && discount.product_ids && discount.product_ids.length > 0) {
     applicableAmount = order.items
       .filter(item => discount.product_ids?.includes(item.produitRef))
@@ -245,6 +247,8 @@ export const applyPromotionsToOrder = async (order: Order): Promise<Order> => {
         config: promo.discount.buy_x_get_y_config, // Ajouter la config pour le suivi
         visuals: getPromotionVisuals(promo),
       });
+      // Mettre à jour le total de la commande pour les calculs suivants
+      mutableOrder.total = currentSubtotal;
     }
   }
 
@@ -265,6 +269,8 @@ export const applyPromotionsToOrder = async (order: Order): Promise<Order> => {
           config: { promo_code: promoCodePromotion.discount.promo_code }, // Ajouter le code promo pour le suivi
           visuals: getPromotionVisuals(promoCodePromotion),
         });
+        // Mettre à jour le total de la commande pour les calculs suivants
+        mutableOrder.total = currentSubtotal;
       }
     }
   }
@@ -289,6 +295,8 @@ export const applyPromotionsToOrder = async (order: Order): Promise<Order> => {
         discount_amount: cappedDiscount,
         visuals: getPromotionVisuals(promo),
       });
+      // Mettre à jour le total de la commande pour les calculs suivants
+      mutableOrder.total = currentSubtotal;
     }
   }
 

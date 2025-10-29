@@ -251,6 +251,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
     const clientPhone = order.clientInfo?.telephone ?? order.client_phone ?? '';
     const clientAddress = order.clientInfo?.adresse ?? order.client_address ?? '';
     const hasClientDetails = Boolean(clientName || clientPhone || clientAddress);
+    const getPromotionIcon = (promo: { type: string }) => {
+        if (promo.type === 'free_shipping') return <TruckIcon size={16} />;
+        if (promo.type === 'percentage') return <Percent size={16} />;
+        if (promo.type === 'buy_x_get_y') return <Gift size={16} />;
+        return <Tag size={16} />;
+    };
+
     const promotionBanners = hasAppliedPromotions
         ? order.applied_promotions!.map((promotion, index) => {
             const promoConfig = typeof promotion.config === 'object' && promotion.config !== null
@@ -258,72 +265,28 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                 : undefined;
             const promoCode = promoConfig?.promo_code as string | undefined;
             const visuals = promotion.visuals || null;
-            const bannerImage = visuals?.banner_image || visuals?.banner_url;
-            const bannerText = visuals?.banner_text || undefined;
+            const bgColor = visuals?.badge_bg_color || '#4CAF50';
             const discountAmount = promotion.discount_amount || 0;
-            const scheme = promotionColorSchemes[index % promotionColorSchemes.length];
-
-            const bannerPaddingClass = variant === 'hero' ? 'p-1.5 sm:p-2' : 'p-3 sm:p-4';
-            const bannerGapClass = variant === 'hero' ? 'gap-3' : 'gap-4';
-            const bannerMediaClass = variant === 'hero'
-                ? 'relative h-6 w-10 flex-shrink-0 overflow-hidden rounded-xl bg-white/15'
-                : 'relative h-8 w-14 flex-shrink-0 overflow-hidden rounded-xl bg-white/15';
-            const bannerFallbackTextClass = variant === 'hero'
-                ? 'flex h-full w-full items-center justify-center px-2 text-center text-[9px] font-semibold leading-tight text-white'
-                : 'flex h-full w-full items-center justify-center px-2 text-center text-[11px] font-semibold leading-tight text-white';
-            const bannerTitleClass = variant === 'hero'
-                ? 'text-xs font-semibold tracking-wide text-white whitespace-nowrap truncate'
-                : 'text-sm font-semibold tracking-wide text-white whitespace-nowrap truncate';
-            const bannerCodeClass = variant === 'hero'
-                ? 'text-[9px] font-medium uppercase tracking-wide text-white/85 whitespace-nowrap'
-                : 'text-[11px] font-medium uppercase tracking-wide text-white/85 whitespace-nowrap';
-            const discountTextClass = variant === 'hero'
-                ? 'block text-xs font-bold text-white'
-                : 'block text-sm font-bold text-white';
-            const overlayTextClass = variant === 'hero'
-                ? 'absolute bottom-1 left-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide'
-                : 'absolute bottom-1 left-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide';
 
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className={`promo-banner flex w-full items-center ${bannerGapClass} overflow-hidden rounded-2xl border bg-gradient-to-r ${bannerPaddingClass} text-white shadow-lg ${scheme.gradient} ${scheme.border} ${scheme.glow}`}
+                    className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200"
+                    style={{
+                        borderLeftColor: bgColor,
+                        background: `linear-gradient(to right, ${bgColor}15, white)`,
+                    }}
                     aria-label={`Promotion ${promotion.name}`}
                 >
-                    <div className={bannerMediaClass}>
-                        {bannerImage ? (
-                            <>
-                                <img
-                                    src={bannerImage}
-                                    alt={bannerText || promotion.name}
-                                    className="h-full w-full object-cover opacity-95"
-                                />
-                                {bannerText && (
-                                    <div className={overlayTextClass}>
-                                        {bannerText}
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className={bannerFallbackTextClass}>
-                                {promotion.name}
-                            </div>
-                        )}
+                    <div
+                        className="flex items-center justify-center w-10 h-10 flex-shrink-0"
+                        style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
+                    >
+                        {getPromotionIcon(promotion)}
                     </div>
-                    <div className="flex min-w-0 flex-1 flex-col text-left">
-                        {(!bannerImage || !bannerText) && (
-                            <span className={bannerTitleClass} title={promotion.name}>
-                                {promotion.name}
-                            </span>
-                        )}
-                        {promoCode && (
-                            <span className={bannerCodeClass}>
-                                Code: {promoCode}
-                            </span>
-                        )}
-                    </div>
-                    <div className="text-right whitespace-nowrap">
-                        <span className={discountTextClass}>
+                    <div className="flex-1 px-2 py-1 flex items-center justify-between">
+                        <p className="font-bold text-gray-900 text-sm">{promotion.name}</p>
+                        <span className="text-sm font-bold text-green-700 whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
@@ -1210,10 +1173,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         )}
                     </div>
 
-                    {isTakeawayOrder && promotionsSectionContent}
-
-                    {/* Affichage du subtotal, des promotions et des codes promo */}
-                    {!isTakeawayOrder && promotionsSectionContent}
+                    {promotionsSectionContent}
 
                     {totalDiscount > 0 && (
                         <div className={`mt-4 flex items-center justify-between rounded-lg border px-3 py-2 text-sm font-semibold ${
@@ -1253,7 +1213,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 </div>
                             )}
                             {order.receipt_url && (
-                                <button onClick={() => setReceiptModalOpen(true)} className="flex items-center text-blue-400 hover:underline"><Receipt size={16} className="mr-2"/>Voir le justificatif</button>
+                                <div className="flex items-center justify-between">
+                                    <span className="font-medium">Comprobante de pago:</span>
+                                    <button onClick={() => setReceiptModalOpen(true)} className="flex items-center text-blue-400 hover:underline"><Receipt size={16} className="mr-2"/>Voir</button>
+                                </div>
                             )}
                         </div>
                     )}
