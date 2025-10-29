@@ -671,7 +671,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                             <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 p-4 sm:p-5">
                                                 <div className="flex items-center justify-between gap-4">
                                                       <div className="flex-1 min-w-0 flex items-center gap-4">
-                                                            <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-white font-bold text-base flex-shrink-0 shadow-inner shadow-black/40">
+                                                            <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-white font-bold text-base flex-shrink-0">shadow-inner shadow-black/40">
                                                                 {item.quantite}
                                                             </div>
                                                             <div className="min-w-0 flex-1 space-y-1">
