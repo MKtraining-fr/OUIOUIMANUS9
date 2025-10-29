@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { api } from '../services/api';
 import { Order } from '../types';
-import { CheckCircle, ChefHat, FileText, PackageCheck, User, MapPin, Receipt, Phone, Gift } from 'lucide-react';
-
-const PROMO_ICONS: { [key: string]: string } = {
-    "free_shipping": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/free_shipping.png",
-    "percentage": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/percentage.png",
-    "buy_x_get_y": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/buy_x_get_y.png",
-    "default": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/default.png",
-    "time_range": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/time_range.png",
-};
+import { CheckCircle, ChefHat, FileText, PackageCheck, User, MapPin, Receipt, Phone, Tag, TruckIcon, Percent, Gift } from 'lucide-react';
 import { formatCurrencyCOP } from '../utils/formatIntegerAmount';
 import {
     clearActiveCustomerOrder,
@@ -259,15 +251,6 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
     const clientPhone = order.clientInfo?.telephone ?? order.client_phone ?? '';
     const clientAddress = order.clientInfo?.adresse ?? order.client_address ?? '';
     const hasClientDetails = Boolean(clientName || clientPhone || clientAddress);
-
-    const getPromotionIconUrl = (promo: { type: string, conditions?: { time_range?: unknown } }): string => {
-        if (promo.type === 'free_shipping') return PROMO_ICONS.free_shipping;
-        if (promo.type === 'percentage') return PROMO_ICONS.percentage;
-        if (promo.conditions?.time_range) return PROMO_ICONS.time_range;
-        if (promo.type === 'buy_x_get_y') return PROMO_ICONS.buy_x_get_y;
-        return PROMO_ICONS.default;
-    };
-
     const promotionBanners = hasAppliedPromotions
         ? order.applied_promotions!.map((promotion, index) => {
             const promoConfig = typeof promotion.config === 'object' && promotion.config !== null
@@ -324,14 +307,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 {promotion.name}
                             </div>
                         )}
-                        {/* Utilisation de l'icône Cloudinary si pas d'image de bannière */}
+                        {/* Ajout d'une icône de secours pour les cas où il n'y a pas d'image de bannière */}
                         {!visuals?.banner_image && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                                <img
-                                    src={getPromotionIconUrl(promotion)}
-                                    alt={promotion.name}
-                                    className="w-full h-full object-contain p-1"
-                                />
+                                <Gift size={24} className="text-white opacity-75" />
                             </div>
                         )}
                     </div>

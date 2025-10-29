@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchActivePromotions } from '../services/promotionsApi';
-
-import { Gift } from 'lucide-react';
 import { Promotion } from '../types/promotions';
-
-const PROMO_ICONS: { [key: string]: string } = {
-    "free_shipping": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/free_shipping.png",
-    "percentage": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/percentage.png",
-    "buy_x_get_y": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/buy_x_get_y.png",
-    "default": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/default.png",
-    "time_range": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/time_range.png",
-};
+import { Tag, Gift, TruckIcon, Clock, Percent } from 'lucide-react';
 
 const ActivePromotionsDisplay: React.FC = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -40,12 +31,12 @@ const ActivePromotionsDisplay: React.FC = () => {
 
   if (loading || visiblePromotions.length === 0) return null;
 
-  const getPromotionIconUrl = (promo: Promotion): string => {
-    if (promo.type === 'free_shipping') return PROMO_ICONS.free_shipping;
-    if (promo.type === 'percentage') return PROMO_ICONS.percentage;
-    if (promo.conditions?.time_range) return PROMO_ICONS.time_range;
-    if (promo.type === 'buy_x_get_y') return PROMO_ICONS.buy_x_get_y;
-    return PROMO_ICONS.default;
+  const getPromotionIcon = (promo: Promotion) => {
+    if (promo.type === 'free_shipping') return <TruckIcon size={16} />;
+    if (promo.type === 'percentage') return <Percent size={16} />;
+    if (promo.conditions?.time_range) return <Clock size={16} />;
+    if (promo.type === 'buy_x_get_y') return <Gift size={16} />;
+    return <Tag size={16} />;
   };
 
   const getPromotionDescription = (promo: Promotion) => {
@@ -118,7 +109,7 @@ const ActivePromotionsDisplay: React.FC = () => {
                       <div
                 className="flex items-center justify-center w-10 h-10 flex-shrink-0"       style={{ backgroundColor: bgColor, color: promo.visuals?.badge_color || '#FFFFFF' }}
               >
-                <img src={getPromotionIconUrl(promo)} alt={promo.name} className="w-full h-full object-contain p-1" />
+                {getPromotionIcon(promo)}
                 </div>              <div className="flex-1 px-2 py-1 flex items-center justify-between">
                 <p className="font-bold text-gray-900 text-sm">{promo.name}</p>
                 <p className="text-xs text-gray-600 truncate ml-2">{getPromotionDescription(promo)}</p>
