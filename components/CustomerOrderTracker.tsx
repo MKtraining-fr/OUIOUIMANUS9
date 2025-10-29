@@ -622,11 +622,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                 <p className="text-base font-semibold text-black sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
-                                                                {item.description && (
-                                                                    <p className="text-xs text-gray-600">{item.description}</p>
+                                                                {itemDescription && (
+                                                                    <p className="text-xs text-gray-600">{itemDescription}</p>
                                                                 )}
-                                                                {itemDescription && (                                                                    <p className="text-xs text-gray-600">{item.commentaire}</p>
-                                                                )}
+
                                                                 {item.commentaire && (
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
