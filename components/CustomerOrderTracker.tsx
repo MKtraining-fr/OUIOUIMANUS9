@@ -279,12 +279,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     aria-label={`Promotion ${promotion.name}`}
                 >
                     <div
-                        className="flex items-center justify-center w-8 h-8 flex-shrink-0"
+                        className="flex items-center justify-center w-7 h-7 flex-shrink-0"
                         style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
                     </div>
-                    <div className="flex-1 px-3 py-2 flex items-center justify-between">
+                    <div className="flex-1 px-3 py-1 flex items-center justify-between">
                         <p className="font-bold text-white text-base">{promotion.name}</p>
                         <span className="text-base font-bold text-emerald-300 whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
@@ -613,7 +613,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-3 sm:px-5 sm:py-4">
+                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-3 sm:px-5 sm:py-3">
                                                 <div className="flex flex-col gap-4">
                                                     <div className="flex flex-wrap items-start justify-between gap-4">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4">
@@ -621,15 +621,14 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                 {item.quantite}
                                                             </span>
                                                             <div className="min-w-0 flex-1">
-                                                                <p className="text-base font-semibold leading-tight text-white sm:text-lg">
+                                                                <p className="text-base font-semibold text-white sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
                                                                 {itemDescription && (
                                                                     <p className="text-xs text-white/70">{itemDescription}</p>
                                                                 )}
                                                                 {item.commentaire && (
-                                                                    <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>
-                                                                )}
+                                                                    <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center rounded-full bg-white/10 px-4 py-2 text-base font-semibold text-white shadow-inner shadow-black/30">
