@@ -19,6 +19,3 @@
 # Autres instructions...
 
 ...
-
-<!-- Trigger commit for Netlify deployment after merging critical fixes - Final Check -->
-
