@@ -251,6 +251,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
     const clientPhone = order.clientInfo?.telephone ?? order.client_phone ?? '';
     const clientAddress = order.clientInfo?.adresse ?? order.client_address ?? '';
     const hasClientDetails = Boolean(clientName || clientPhone || clientAddress);
+    const getPromotionIcon = (promo: { type: string }) => {
+        if (promo.type === 'free_shipping') return <TruckIcon size={16} />;
+        if (promo.type === 'percentage') return <Percent size={16} />;
+        if (promo.type === 'buy_x_get_y') return <Gift size={16} />;
+        return <Tag size={16} />;
+    };
+
     const promotionBanners = hasAppliedPromotions
         ? order.applied_promotions!.map((promotion, index) => {
             const promoConfig = typeof promotion.config === 'object' && promotion.config !== null
@@ -258,70 +265,28 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                 : undefined;
             const promoCode = promoConfig?.promo_code as string | undefined;
             const visuals = promotion.visuals || null;
+            const bgColor = visuals?.badge_bg_color || '#4CAF50';
             const discountAmount = promotion.discount_amount || 0;
-            const scheme = promotionColorSchemes[index % promotionColorSchemes.length];
-
-            const bannerPaddingClass = variant === 'hero' ? 'p-1.5 sm:p-2' : 'p-3 sm:p-4';
-            const bannerGapClass = variant === 'hero' ? 'gap-3' : 'gap-4';
-            const bannerMediaClass = variant === 'hero'
-                ? 'relative h-6 w-10 flex-shrink-0 overflow-hidden rounded-xl bg-white/15'
-                : 'relative h-8 w-14 flex-shrink-0 overflow-hidden rounded-xl bg-white/15';
-            const bannerFallbackTextClass = variant === 'hero'
-                ? 'flex h-full w-full items-center justify-center px-2 text-center text-[9px] font-semibold leading-tight text-white'
-                : 'flex h-full w-full items-center justify-center px-2 text-center text-[11px] font-semibold leading-tight text-white';
-            const bannerTitleClass = variant === 'hero'
-                ? 'text-xs font-semibold tracking-wide text-white whitespace-nowrap truncate'
-                : 'text-sm font-semibold tracking-wide text-white whitespace-nowrap truncate';
-            const bannerCodeClass = variant === 'hero'
-                ? 'text-[9px] font-medium uppercase tracking-wide text-white/85 whitespace-nowrap'
-                : 'text-[11px] font-medium uppercase tracking-wide text-white/85 whitespace-nowrap';
-            const discountTextClass = variant === 'hero'
-                ? 'block text-xs font-bold text-white'
-                : 'block text-sm font-bold text-white';
-            const overlayTextClass = variant === 'hero'
-                ? 'absolute bottom-1 left-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide'
-                : 'absolute bottom-1 left-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[10px] font-semibold uppercase tracking-wide';
 
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className={`promo-banner flex w-full items-center ${bannerGapClass} overflow-hidden rounded-2xl border bg-gradient-to-r ${bannerPaddingClass} text-white shadow-lg ${scheme.gradient} ${scheme.border} ${scheme.glow}`}
+                    className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200"
+                    style={{
+                        borderLeftColor: bgColor,
+                        background: `linear-gradient(to right, ${bgColor}15, white)`,
+                    }}
                     aria-label={`Promotion ${promotion.name}`}
                 >
-                    <div className={bannerMediaClass}>
-                        {visuals?.banner_image ? (
-                            <>
-                                <img
-                                    src={visuals.banner_image}
-                                    alt={visuals.banner_text || promotion.name}
-                                    className="h-full w-full object-cover opacity-95"
-                                />
-                                {visuals.banner_text && (
-                                    <div className={overlayTextClass}>
-                                        {visuals.banner_text}
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className={bannerFallbackTextClass}>
-                                {promotion.name}
-                            </div>
-                        )}
+                    <div
+                        className="flex items-center justify-center w-10 h-10 flex-shrink-0"
+                        style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
+                    >
+                        {getPromotionIcon(promotion)}
                     </div>
-                    <div className="flex min-w-0 flex-1 flex-col text-left">
-                        {(!visuals?.banner_image || !visuals?.banner_text) && (
-                            <span className={bannerTitleClass} title={promotion.name}>
-                                {promotion.name}
-                            </span>
-                        )}
-                        {promoCode && (
-                            <span className={bannerCodeClass}>
-                                Code: {promoCode}
-                            </span>
-                        )}
-                    </div>
-                    <div className="text-right whitespace-nowrap">
-                        <span className={discountTextClass}>
+                    <div className="flex-1 px-2 py-1 flex items-center justify-between">
+                        <p className="font-bold text-gray-900 text-sm">{promotion.name}</p>
+                        <span className="text-sm font-bold text-green-700 whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
@@ -570,7 +535,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                         <div className="rounded-2xl bg-black/25 p-4 sm:p-5">
                             <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Informations</p>
-                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:items-start">
+                            <div className="mt-3 flex flex-col gap-4 text-sm sm:flex-row sm:items-start sm:justify-between">
                                 <div className="space-y-2">
                                     {hasClientDetails ? (
                                         <>
@@ -597,9 +562,9 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         <p className="text-white/70">Aucune information client requise.</p>
                                     )}
                                 </div>
-                                <div className="flex flex-col items-start gap-3 text-sm sm:items-end sm:text-right">
+                                <div className="flex flex-col items-start gap-3 text-sm sm:min-w-[12rem] sm:items-end sm:text-right">
                                     {order.receipt_url && (
-                                        <div className="flex flex-col items-start gap-2 sm:items-end w-full">
+                                        <div className="flex flex-col items-start gap-2 sm:items-end">
                                             <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
                                                 Comprobante de pago
                                             </span>
@@ -613,7 +578,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                     <img
                                                         src={order.receipt_url}
                                                         alt="Aperçu du justificatif"
-                                                        className="h-24 w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                                                        className="h-20 w-28 object-cover transition duration-500 ease-out group-hover:scale-105 sm:h-24 sm:w-32"
                                                     />
                                                     <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition duration-300 group-hover:opacity-100">
                                                         <Receipt size={20} className="text-white" />
@@ -646,24 +611,24 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         return (
                                             <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 p-4 sm:p-5">
                                                 <div className="flex flex-col gap-4">
-                                                    <div className="flex items-center justify-between gap-4">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4">
-                                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40">
+                                                    <div className="flex flex-wrap items-start justify-between gap-4">
+                                                        <div className="flex min-w-0 flex-1 items-start gap-4">
+                                                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-xl font-semibold text-white shadow-inner shadow-black/40 sm:h-14 sm:w-14 sm:text-2xl">
                                                                 {item.quantite}
                                                             </span>
-                                                            <div className="min-w-0 flex-1 space-y-1">
-                                                                <p className="text-base font-semibold leading-tight text-white sm:text-lg">
+                                                            <div className="min-w-0 flex-1 space-y-2">
+                                                                <p className="text-lg font-semibold leading-tight text-white sm:text-xl">
                                                                     {item.nom_produit}
                                                                 </p>
                                                                 {itemDescription && (
-                                                                    <p className="text-xs text-white/70">{itemDescription}</p>
+                                                                    <p className="text-sm text-white/70">{itemDescription}</p>
                                                                 )}
                                                                 {item.commentaire && (
-                                                                    <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>
+                                                                    <p className="text-sm italic text-amber-200/80">“{item.commentaire}”</p>
                                                                 )}
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-white/10 px-3 py-1.5 text-sm font-semibold text-white shadow-inner shadow-black/30">
+                                                        <div className="flex items-center rounded-full bg-white/10 px-4 py-2 text-base font-semibold text-white shadow-inner shadow-black/30">
                                                             {isFreeShipping ? (
                                                                 <span className="text-emerald-200">GRATUIT</span>
                                                             ) : (
