@@ -613,11 +613,11 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-3 sm:px-5 sm:py-3">
+                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-1 sm:px-5 sm:py-2">
                                                 <div className="flex flex-col gap-4">
-                                                    <div className="flex flex-wrap items-start justify-between gap-4">
+                                                    <div className="flex flex-wrap items-center justify-between gap-4">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4">
-                                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40 sm:h-12 sm:w-12 sm:text-xl">
+                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-base font-semibold text-white shadow-inner shadow-black/40 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
                                                             </span>
                                                             <div className="min-w-0 flex-1">
@@ -1159,7 +1159,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                             </div>
                                             <div className="whitespace-nowrap text-right text-sm font-semibold">
                                                 {isFreeShipping ? (
-                                                    <div className="flex flex-col items-end">
+                                                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                                         <span className="text-xs text-gray-400 line-through">{formatCurrencyCOP(8000)}</span>
                                                         <span className="text-sm font-bold text-green-600">GRATIS</span>
                                                     </div>
