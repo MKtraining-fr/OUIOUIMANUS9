@@ -274,7 +274,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200"
                     style={{
                         borderLeftColor: bgColor,
-                        background: `linear-gradient(to right, ${bgColor}15, white)`,
+                        backgroundColor: bgColor,
                     }}
                     aria-label={`Promotion ${promotion.name}`}
                 >
@@ -283,8 +283,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
-                    </div>
-                    <div className="flex-1 px-3 py-1 flex items-center justify-between">
+                    </div>                    <div className="flex-1 px-3 flex items-center justify-between h-7">
                         <p className="font-bold text-white text-base">{promotion.name}</p>
                         <span className="text-base font-bold text-emerald-300 whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
