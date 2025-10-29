@@ -397,7 +397,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             <h2 className="text-3xl font-bold text-center text-white sm:text-4xl">
                                 Commande #{order.id.slice(-6)}
                             </h2>
-                                                    <div className="grid grid-cols-4 gap-3 sm:gap-4">
+                                                    <div className="grid grid-cols-2 gap-4 items-start pt-4">-3 sm:grid-cols-4">
                             {steps.map((step, index) => {
                                 const isActive = index === currentStep;
                                 const isFinalStep = index === steps.length - 1;
@@ -418,7 +418,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         key={step.name}
                                         className={cardClasses}
                                         aria-current={isActive ? 'step' : undefined}
-                                                                               <div className="flex flex-col items-center justify-center gap-2 sm:gap-3">
+                                                                           <div className="flex flex-col items-center justify-center">ap-2 sm:gap-3">
                                             <p
                                                 className={`text-xs sm:text-sm font-semibold tracking-wide ${
                                                     isCompletedStep || isActive ? 'text-white' : 'text-white/70'
