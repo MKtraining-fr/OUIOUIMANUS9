@@ -5,11 +5,11 @@ import { Gift } from 'lucide-react';
 import { Promotion } from '../types/promotions';
 
 const PROMO_ICONS: { [key: string]: string } = {
-    "free_shipping": "https://res.cloudinary.com/dmed4shf3/image/upload/v1700000000/manus-promo-icons/free_shipping.png",
-    "percentage": "https://res.cloudinary.com/dmed4shf3/image/upload/v1700000000/manus-promo-icons/percentage.png",
-    "buy_x_get_y": "https://res.cloudinary.com/dmed4shf3/image/upload/v1700000000/manus-promo-icons/buy_x_get_y.png",
-    "default": "https://res.cloudinary.com/dmed4shf3/image/upload/v1700000000/manus-promo-icons/default.png",
-    "time_range": "https://res.cloudinary.com/dmed4shf3/image/upload/v1700000000/manus-promo-icons/time_range.png",
+    "free_shipping": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/free_shipping.png",
+    "percentage": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/percentage.png",
+    "buy_x_get_y": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/buy_x_get_y.png",
+    "default": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/default.png",
+    "time_range": "https://res.cloudinary.com/your-cloud-name/image/upload/v1234567890/manus-promo-icons/time_range.png",
 };
 
 const ActivePromotionsDisplay: React.FC = () => {
