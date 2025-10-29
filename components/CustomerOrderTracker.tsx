@@ -279,14 +279,14 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     aria-label={`Promotion ${promotion.name}`}
                 >
                     <div
-                        className="flex items-center justify-center w-10 h-10 flex-shrink-0"
+                        className="flex items-center justify-center w-8 h-8 flex-shrink-0"
                         style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
                     </div>
-                    <div className="flex-1 px-2 py-1 flex items-center justify-between">
-                        <p className="font-bold text-gray-900 text-sm">{promotion.name}</p>
-                        <span className="text-sm font-bold text-green-700 whitespace-nowrap">
+                    <div className="flex-1 px-3 py-2 flex items-center justify-between">
+                        <p className="font-bold text-white text-base">{promotion.name}</p>
+                        <span className="text-base font-bold text-emerald-300 whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
@@ -534,7 +534,14 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         </div>
 
                         <div className="rounded-2xl bg-black/25 p-4 sm:p-5">
-                            <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Informations</p>
+                            <div className="flex items-start justify-between">
+                                <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Informations</p>
+                                {order.receipt_url && (
+                                    <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
+                                        Comprobante de pago
+                                    </span>
+                                )}
+                            </div>
                             <div className="mt-3 flex flex-col gap-4 text-sm sm:flex-row sm:items-start sm:justify-between">
                                 <div className="space-y-2">
                                     {hasClientDetails ? (
@@ -565,9 +572,6 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 <div className="flex flex-col items-start gap-3 text-sm sm:min-w-[12rem] sm:items-end sm:text-right">
                                     {order.receipt_url && (
                                         <div className="flex flex-col items-start gap-2 sm:items-end">
-                                            <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                                                Comprobante de pago
-                                            </span>
                                             <button
                                                 type="button"
                                                 onClick={() => setReceiptModalOpen(true)}
@@ -609,22 +613,22 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 p-4 sm:p-5">
+                                            <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 px-4 py-3 sm:px-5 sm:py-4">
                                                 <div className="flex flex-col gap-4">
                                                     <div className="flex flex-wrap items-start justify-between gap-4">
-                                                        <div className="flex min-w-0 flex-1 items-start gap-4">
-                                                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-xl font-semibold text-white shadow-inner shadow-black/40 sm:h-14 sm:w-14 sm:text-2xl">
+                                                        <div className="flex min-w-0 flex-1 items-center gap-4">
+                                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40 sm:h-12 sm:w-12 sm:text-xl">
                                                                 {item.quantite}
                                                             </span>
-                                                            <div className="min-w-0 flex-1 space-y-2">
-                                                                <p className="text-lg font-semibold leading-tight text-white sm:text-xl">
+                                                            <div className="min-w-0 flex-1">
+                                                                <p className="text-base font-semibold leading-tight text-white sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
                                                                 {itemDescription && (
-                                                                    <p className="text-sm text-white/70">{itemDescription}</p>
+                                                                    <p className="text-xs text-white/70">{itemDescription}</p>
                                                                 )}
                                                                 {item.commentaire && (
-                                                                    <p className="text-sm italic text-amber-200/80">“{item.commentaire}”</p>
+                                                                    <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>
                                                                 )}
                                                             </div>
                                                         </div>
