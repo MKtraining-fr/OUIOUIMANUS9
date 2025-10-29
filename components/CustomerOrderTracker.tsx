@@ -522,19 +522,19 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     <div className="space-y-4">
                         <h2 className="text-xl font-bold text-gray-800 border-b pb-2">Récapitulatif de la Commande</h2>
                         {order.items.map((item, index) => (
-                            <div key={index} className="flex justify-between items-start border-b border-gray-100 pb-2">
+                            <div key={index} className="flex justify-between items-start border-b border-gray-100 py-1">
                                 <div className="flex items-start gap-2">
                                     <span className="text-sm font-bold text-gray-800">{item.quantity}x</span>
-                                    <p className="text-sm font-medium text-gray-700 leading-tight">
+                                    <p className="text-sm font-normal text-gray-700 leading-snug">
                                         {item.product_name}
                                         {item.notes && (
-                                            <span className="block text-xs text-gray-500 italic">
+                                            <span className="block text-xs text-gray-500 italic leading-none">
                                                 ({item.notes})
                                             </span>
                                         )}
                                     </p>
                                 </div>
-                                <span className="text-sm font-semibold text-gray-800">
+                                <span className="text-sm font-medium text-gray-800">
                                     {formatCurrencyCOP(item.total_price)}
                                 </span>
                             </div>
