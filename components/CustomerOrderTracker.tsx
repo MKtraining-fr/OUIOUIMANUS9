@@ -307,12 +307,6 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 {promotion.name}
                             </div>
                         )}
-                        {/* Ajout d'une icône de secours pour les cas où il n'y a pas d'image de bannière */}
-                        {!visuals?.banner_image && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <Gift size={24} className="text-white opacity-75" />
-                            </div>
-                        )}
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col text-left">
                         {(!visuals?.banner_image || !visuals?.banner_text) && (
@@ -575,8 +569,8 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         </div>
 
                         <div className="rounded-2xl bg-black/25 p-4 sm:p-5">
-                            <p className="text-sm font-semibold uppercase tracking-wide text-white/60">Informations</p>
-                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm sm:items-start">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Informations</p>
+                            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:items-start">
                                 <div className="space-y-2">
                                     {hasClientDetails ? (
                                         <>
@@ -603,10 +597,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         <p className="text-white/70">Aucune information client requise.</p>
                                     )}
                                 </div>
-                                <div className="flex flex-col items-start gap-3 text-sm sm:items-end sm:text-left">
+                                <div className="flex flex-col items-start gap-3 text-sm sm:items-end sm:text-right">
                                     {order.receipt_url && (
                                         <div className="flex flex-col items-start gap-2 sm:items-end w-full">
-                                            <span className="text-sm font-semibold uppercase tracking-wide text-white/60">
+                                            <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
                                                 Comprobante de pago
                                             </span>
                                             <button
@@ -651,11 +645,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                                         return (
                                             <div key={item.id} className="rounded-xl border border-white/10 bg-black/25 p-4 sm:p-5">
-                                                <div className="flex items-center justify-between gap-4">
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="flex items-center justify-between gap-4">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4">
-                                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40">
+                                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg font-semibold text-white shadow-inner shadow-black/40">
                                                                 {item.quantite}
-                                                            </div>
+                                                            </span>
                                                             <div className="min-w-0 flex-1 space-y-1">
                                                                 <p className="text-base font-semibold leading-tight text-white sm:text-lg">
                                                                     {item.nom_produit}
@@ -676,6 +671,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                             )}
                                                         </div>
                                                     </div>
+                                                </div>
                                             </div>
                                         );
                                     })
