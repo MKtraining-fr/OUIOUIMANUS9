@@ -622,15 +622,18 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                 <p className="text-base font-semibold text-black sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
+                                                                {item.description && (
+                                                                    <p className="text-xs text-gray-600">{item.description}</p>
+                                                                )}
                                                                 {itemDescription && (                                                                    <p className="text-xs text-gray-600">{item.commentaire}</p>
                                                                 )}
                                                                 {item.commentaire && (
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-white/10 px-4 py-2 text-base font-semibold text-white shadow-inner shadow-black/30">
+                                                        <div className="flex items-center rounded-full bg-gray-200 px-4 py-2 text-base font-semibold text-black shadow-inner shadow-gray-400">
                                                             {isFreeShipping ? (
-                                                                <span className="text-emerald-200">GRATUIT</span>
+                                                                <span className="text-emerald-600">GRATUIT</span>
                                                             ) : (
                                                                 formatCurrencyCOP(item.prix_unitaire * item.quantite)
                                                             )}
