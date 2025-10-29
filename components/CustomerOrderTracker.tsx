@@ -707,12 +707,15 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                     <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Promotions appliquées</p>
                                     <div className="space-y-3">{promotionBanners}</div>
                                 </div>
-                           712	                            {totalDiscount > 0 ? (
-713	                                <div className="flex items-center justify-between p-3 rounded-lg bg-emerald-300/30 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100">
-714	                                    <span>Réductions totales</span>
-715	                                    <span>- {formatCurrencyCOP(totalDiscount)}</span>
-716	                                </div>
-717	                            ) : null}                  <div className="mt-4 flex items-center justify-between border-t border-white/15 pt-3 text-base font-semibold text-white">
+                            ) : null}
+
+                            {totalDiscou                                    <div className="flex items-center justify-between p-3 rounded-lg bg-black/20 shadow-lg h-14">emerald-300/30 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100">
+                                    <span>Réductions totales</span>
+                                    <span>- {formatCurrencyCOP(totalDiscount)}</span>
+                                </div>
+                            )}
+
+                            <div className="mt-4 flex items-center justify-between border-t border-white/15 pt-3 text-base font-semibold text-white">
                                 <span>Total de la commande</span>
                                 <span>{formatCurrencyCOP(order.total)}</span>
                             </div>
