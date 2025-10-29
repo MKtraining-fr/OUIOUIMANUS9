@@ -101,11 +101,11 @@ const ActivePromotionsDisplay: React.FC = () => {
           return (
                      <div
                   className="flex items-start rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden"
-              >
               style={{
                 borderLeftColor: bgColor,
                 background: `linear-gradient(to right, ${bgColor}15, white)`,
               }}
+                      >
                       <div
                 className="flex items-center justify-center w-10 h-10 flex-shrink-0"       style={{ backgroundColor: bgColor, color: promo.visuals?.badge_color || '#FFFFFF' }}
               >
