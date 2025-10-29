@@ -617,7 +617,7 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                 </div>
 
                 {/* Active Promotions Display */}
-                <ActivePromotionsDisplay />
+                <div class="bg-white p-4 rounded-lg shadow-md"><ActivePromotionsDisplay /></div>
 
                 {/* Category Filters */}
                 <div className="flex space-x-3 mb-6 overflow-x-auto pb-2 p-4 rounded-lg shadow-md bg-white">
