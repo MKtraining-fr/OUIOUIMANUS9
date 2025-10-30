@@ -28,19 +28,15 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
         <>
             <div className={`relative flex h-full flex-col overflow-hidden rounded-xl border text-gray-900 shadow-md transition-shadow duration-300 hover:shadow-lg ${urgencyStyles.border} ${urgencyStyles.background}`}>
                 <span aria-hidden className={`absolute inset-y-0 left-0 w-1 ${urgencyStyles.accent}`} />
-                <header className="border-b border-gray-200 px-5 py-4">
-                    <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
-                        <div className="min-w-0 space-y-1">
+                <header className="border-b border-gray-200 px-5 pt-3 pb-2">
+                    <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                        <div className="min-w-0 space-y-0.5">
                             <h4 className="truncate text-base font-semibold leading-tight text-gray-900 sm:text-lg md:text-xl">{displayName}</h4>
                             <p className="text-xs text-gray-500">
                                 Pedido enviado {new Date(timerStart).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
                             </p>
                         </div>
-                        <div className="flex flex-col items-start gap-2 sm:items-end">
-                            <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${urgencyStyles.badge}`}>
-                                <span className={`h-2 w-2 rounded-full ${urgencyStyles.accent}`} />
-                                <span>{urgencyLabelMap[urgencyStyles.level]}</span>
-                            </span>
+                        <div className="flex flex-col items-start gap-1 sm:items-end">
                             <div className="flex w-full justify-start sm:justify-end">
                                 <OrderTimer startTime={timerStart} className=" text-sm sm:text-base" />
                             </div>
@@ -48,10 +44,10 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                     </div>
                 </header>
 
-                <div className="flex-1 overflow-hidden px-5 py-4">
-                    <div className="flex h-full flex-col gap-4">
+                <div className="flex-1 overflow-hidden px-5 pt-2 pb-4">
+                    <div className="flex h-full flex-col gap-2">
                         {order.clientInfo && (
-                            <section className="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-900 shadow-sm">
+                            <section className="space-y-2 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm">
                                 {order.clientInfo.nom && (
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2 text-gray-900">
@@ -75,11 +71,11 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                             </section>
                         )}
 
-                        <section className="flex min-h-[10rem] flex-col gap-3 overflow-hidden">
+                        <section className="flex min-h-[10rem] flex-col gap-2 overflow-hidden">
                             <h5 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Artículos</h5>
                             <div className="flex-1 overflow-y-auto pr-1">
                                 {order.items.length > 0 ? (
-                                    <ul className="space-y-2">
+                                    <ul className="space-y-1">
                                         {order.items.map((item: OrderItem) => {
                                             const note = item.commentaire?.trim();
                                             return (
@@ -113,9 +109,9 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                         </section>
 
                         {showPromotionDetails && (
-                            <section className="space-y-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 shadow-sm">
+                            <section className="space-y-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 shadow-sm">
                                 {hasAppliedPromotions && (
-                                    <ul className="space-y-1" aria-label="Promotions">
+                                    <ul className="space-y-0.5" aria-label="Promotions">
                                         {order.applied_promotions!.map(promotion => {
                                             const promoCode = typeof promotion.config === 'object' && promotion.config !== null
                                                 ? (promotion.config as Record<string, unknown>).promo_code
@@ -140,7 +136,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                             </section>
                         )}
 
-                        <div className="mt-auto flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 font-semibold text-gray-900 shadow-sm">
+                        <div className="mt-auto flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 font-semibold text-gray-900 shadow-sm">
                             <span>Total</span>
                             <span className="text-lg sm:text-xl text-gray-900">{formatCurrencyCOP(order.total)}</span>
                         </div>
