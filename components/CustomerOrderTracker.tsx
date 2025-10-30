@@ -273,14 +273,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     key={`${promotion.promotion_id}-${promotion.name}`}
                     className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200 h-10"
                     style={{
-                        borderLeftColor: bgColor,
-                        backgroundColor: bgColor,
+                        background: `linear-gradient(90deg, ${bgColor} 40%, rgba(0,0,0,0.2) 100% )`,
                     }}
                     aria-label={`Promotion ${promotion.name}`}
                 >
                     <div
-                        className="flex items-center justify-center w-7 h-7 flex-shrink-0"
-                        style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
+                        className="flex items-center justify-center w-12 h-full flex-shrink-0"
+                        style={{ color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
                     </div>                    <div className="flex-1 px-3 flex items-center justify-between h-full">
@@ -630,7 +629,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-gray-200 px-4 py-2 text-base font-semibold text-black shadow-inner shadow-gray-400">
+                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm">
                                                             {isFreeShipping ? (
                                                                 <span className="text-emerald-600">GRATUIT</span>
                                                             ) : (
@@ -655,13 +654,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             ) : null}
 
                             {totalDiscount > 0 && (
-                                <div className="mt-5 flex items-center justify-between rounded-xl border border-emerald-300/30 bg-emerald-500/15 px-3 py-2 text-sm font-semibold text-emerald-100">
+                                <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 text-sm font-semibold text-emerald-300 border border-emerald-500/20 shadow-lg">
                                     <span>Réductions totales</span>
                                     <span>- {formatCurrencyCOP(totalDiscount)}</span>
                                 </div>
                             )}
 
-                            <div className="mt-4 flex items-center justify-between border-t border-white/15 pt-3 text-base font-semibold text-white">
+                            <div className="mt-4 flex items-center justify-between border-t border-white/20 pt-4 text-xl font-extrabold text-white">
                                 <span>Total de la commande</span>
                                 <span>{formatCurrencyCOP(order.total)}</span>
                             </div>
