@@ -271,7 +271,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className="flex rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden h-12"
+                    className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200 h-10"
                     style={{
                         background: `linear-gradient(90deg, ${bgColor} 40%, rgba(0,0,0,0.2) 100% )`,
                     }}
@@ -282,9 +282,9 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         style={{ color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
-                    </div>                    <div className="flex-1 px-4 flex items-center justify-between h-full">
-                        <p className="font-bold text-white text-base sm:text-lg">{promotion.name}</p>
-                        <span className="text-sm sm:text-base font-bold text-white whitespace-nowrap">
+                    </div>                    <div className="flex-1 px-3 flex items-center justify-between h-full">
+                        <p className="font-bold text-white text-lg">{promotion.name}</p>
+                        <span className="text-lg font-bold text-white whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
@@ -611,10 +611,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl bg-white/90 px-4 py-2 sm:px-5 sm:py-3 shadow-lg hover:shadow-xl transition duration-300">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex flex-wrap items-center justify-between flex-1">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-gray-800 shadow-inner sm:h-9 sm:w-9 sm:text-base">
+                                            <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
+                                                <div className="flex flex-col gap-4 items-center">
+                                                    <div className="flex flex-wrap items-center justify-between gap-4">
+                                                        <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
                                                             </span>
                                                             <div className="min-w-0 flex-1">
