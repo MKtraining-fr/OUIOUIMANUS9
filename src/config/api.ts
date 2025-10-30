@@ -1,0 +1,1 @@
+// Neutralisation de la clé API Google Maps pour éviter la fuite de secret.\n// La clé doit être fournie via une variable d'environnement Netlify.\nexport const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
