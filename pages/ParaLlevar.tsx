@@ -45,7 +45,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                 </header>
 
                 <div className="flex-1 overflow-hidden px-5 pt-2 pb-4">
-                    <div className="flex h-full flex-col gap-2">
+                    <div className="flex h-full flex-col gap-1">
                         {order.clientInfo && (
                             <section className="space-y-2 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-900 shadow-sm">
                                 {order.clientInfo.nom && (
@@ -71,21 +71,21 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                             </section>
                         )}
 
-                        <section className="flex min-h-[10rem] flex-col gap-2 overflow-hidden mb-0">
+                        <section className="flex min-h-[10rem] flex-col gap-1 overflow-hidden mb-0">
                             <h5 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Artículos</h5>
                             <div className="flex-1 overflow-y-auto pr-1">
                                 {order.items.length > 0 ? (
-                                    <ul className="space-y-1">
+                                    <ul className="space-y-0.5">
                                         {order.items.map((item: OrderItem) => {
                                             const note = item.commentaire?.trim();
                                             return (
-                                                <li key={item.id} className="rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-900 shadow-sm overflow-hidden">
+                                                <li key={item.id} className="rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-900 shadow-sm overflow-hidden py-1">
                                                     <div className="flex items-center justify-between gap-3">
                                                         <div className="flex flex-1 items-center">
-                                                            <span className={`flex h-full w-12 shrink-0 items-center justify-center text-base font-bold text-white shadow-md ${urgencyStyles.accent} rounded-none`}>
+                                                            <span className={`flex h-full w-12 shrink-0 items-center justify-center text-lg font-bold text-white shadow-md ${urgencyStyles.accent} rounded-none`}>
                                                                 {item.quantite}
                                                             </span>
-                                                            <span className="font-semibold text-gray-900 text-[clamp(0.95rem,1.9vw,1.15rem)] leading-snug break-words text-balance whitespace-normal [hyphens:auto] pl-3">
+                                                            <span className="font-semibold text-gray-900 text-[clamp(1.1rem,2.1vw,1.3rem)] leading-snug break-words text-balance whitespace-normal [hyphens:auto] pl-3">
                                                                 {item.nom_produit}
                                                             </span>
                                                         </div>
