@@ -604,14 +604,14 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         <div className="min-h-screen flex flex-col lg:flex-row" style={heroBackgroundStyle}>
             {/* Main Content */}
             <div class="flex-1 p-4 lg:p-8 bg-white">
-                <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md">
-                    <h1 className="text-3xl font-bold text-gray-900 drop-shadow-md">Realizar Pedido</h1>
+                <div class="flex items-center justify-between mb-6 bg-white p-3 rounded-lg shadow-md">
+                    <h1 className="text-2xl font-bold text-gray-900 drop-shadow-md">Realizar Pedido</h1>
                     <button
                         type="button"
                         onClick={() => navigate('/')}
                         className="inline-flex items-center text-sm font-semibold text-brand-primary hover:text-brand-primary/80 transition-colors"
                     >
-                        <ArrowLeft size={16} className="mr-1" />
+                        <ArrowLeft size={14} className="mr-1" />
                         Volver
                     </button>
                 </div>
