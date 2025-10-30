@@ -278,7 +278,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     aria-label={`Promotion ${promotion.name}`}
                 >
                     <div
-                        className="flex items-center justify-center w-12 h-full flex-shrink-0"
+                        className="flex items-center justify-center w-11 h-full flex-shrink-0"
                         style={{ color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
