@@ -271,7 +271,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200"
+                    className="flex items-center rounded-lg shadow-sm transition-transform hover:scale-[1.01] overflow-hidden border border-gray-200 h-10"
                     style={{
                         borderLeftColor: bgColor,
                         backgroundColor: bgColor,
@@ -283,7 +283,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                         style={{ backgroundColor: bgColor, color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
-                    </div>                    <div className="flex-1 px-3 flex items-center justify-between h-7">
+                    </div>                    <div className="flex-1 px-3 flex items-center justify-between h-full">
                         <p className="font-bold text-white text-lg">{promotion.name}</p>
                         <span className="text-lg font-bold text-white whitespace-nowrap">
                             -{formatCurrencyCOP(discountAmount)}
@@ -613,7 +613,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                                         return (
                                             <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
-                                                <div className="flex flex-col gap-4">
+                                                <div className="flex flex-col gap-4 items-center">
                                                     <div className="flex flex-wrap items-center justify-between gap-4">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
