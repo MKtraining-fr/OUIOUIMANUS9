@@ -71,7 +71,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                             </section>
                         )}
 
-                        <section className="flex min-h-[10rem] flex-col gap-1 overflow-hidden mb-0">
+                        <section className="flex flex-col overflow-hidden gap-1">
                             <h5 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Artículos</h5>
                             <div className="flex-1 overflow-y-auto pr-1">
                                 {order.items.length > 0 ? (
@@ -79,20 +79,20 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                                         {order.items.map((item: OrderItem) => {
                                             const note = item.commentaire?.trim();
                                             return (
-                                                <li key={item.id} className="rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-900 shadow-sm overflow-hidden py-1">
-                                                    <div className="flex items-center justify-between gap-3">
+                                                <li key={item.id} className="flex items-stretch rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-900 shadow-sm overflow-hidden min-h-[3.5rem]">
+                                                    <div className="flex flex-1 items-center justify-between gap-3 pr-3">
                                                         <div className="flex flex-1 items-center">
-                                                            <span className={`flex h-full w-12 shrink-0 items-center justify-center text-lg font-bold text-white shadow-md ${urgencyStyles.accent} rounded-none`}>
+                                                            <span className={`flex self-stretch w-12 shrink-0 items-center justify-center text-xl font-bold text-white shadow-md ${urgencyStyles.accent} rounded-l-lg`}>
                                                                 {item.quantite}
                                                             </span>
-                                                            <span className="font-semibold text-gray-900 text-[clamp(1.1rem,2.1vw,1.3rem)] leading-snug break-words text-balance whitespace-normal [hyphens:auto] pl-3">
+                                                            <span className="font-semibold text-gray-900 text-[clamp(1.1rem,2.1vw,1.3rem)] leading-snug break-words text-balance whitespace-normal [hyphens:auto] px-3 py-3">
                                                                 {item.nom_produit}
                                                             </span>
                                                         </div>
                                                         <span className="whitespace-nowrap text-sm font-semibold text-gray-900 sm:text-base">{formatCurrencyCOP(item.prix_unitaire * item.quantite)}</span>
                                                     </div>
                                                     {note && (
-                                                        <p className="mt-2 rounded-md border border-dashed border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium italic text-blue-800 ml-12">
+                                                        <p className="mt-2 rounded-md border border-dashed border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium italic text-blue-800 ml-14 mr-3">
                                                             {note}
                                                         </p>
                                                     )}
@@ -109,7 +109,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                         </section>
 
                         {showPromotionDetails && (
-                            <section className="space-y-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 shadow-sm mt-0">
+                            <section className="space-y-2 rounded-lg border border-emerald-200 bg-emerald-50 bg-emerald-50 px-3 py-2 text-sm text-emerald-900 shadow-sm">
                                 {hasAppliedPromotions && (
                                     <ul className="space-y-0.5" aria-label="Promotions">
                                         {order.applied_promotions!.map(promotion => {
