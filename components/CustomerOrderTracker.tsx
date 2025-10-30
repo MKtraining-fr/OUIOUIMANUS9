@@ -605,7 +605,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         const isDomicilio = item.nom_produit === 'Domicilio';
                                         const isFreeShipping = isDomicilio && item.prix_unitaire === 0;
                                         const itemDescription = (() => {
-                                            const potentialDescription = (item as { product_description?: string | null }).product_description;
+                                            const potentialDescription = (item as { description?: string | null }).description;
                                             return typeof potentialDescription === 'string' && potentialDescription.trim().length > 0
                                                 ? potentialDescription.trim()
                                                 : null;
@@ -1122,7 +1122,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             order.items.map(item => {
                                 const isDomicilio = item.nom_produit === 'Domicilio';
                                 const isFreeShipping = isDomicilio && item.prix_unitaire === 0;
-                                const potentialDescription = (item as { product_description?: string | null }).product_description;
+                                const potentialDescription = (item as { description?: string | null }).description;
                                 const itemDescription = typeof potentialDescription === 'string' && potentialDescription.trim().length > 0
                                     ? potentialDescription.trim()
                                     : null;
