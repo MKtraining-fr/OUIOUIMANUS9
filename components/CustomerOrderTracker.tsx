@@ -271,20 +271,21 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden h-12"
+                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden h-11"
                     style={{
                         background: `linear-gradient(90deg, ${bgColor} 40%, rgba(0,0,0,0.2) 100% )`,
                     }}
                     aria-label={`Promotion ${promotion.name}`}
                 >
                     <div
-                        className="flex items-center justify-center w-12 h-full flex-shrink-0"
+                        className="flex items-center justify-center w-11 h-full flex-shrink-0"
                         style={{ color: visuals?.badge_color || '#FFFFFF' }}
                     >
                         {getPromotionIcon(promotion)}
-                    </div>                    <div className="flex-1 px-3 flex items-center justify-between h-full">
-                        <p className="font-bold text-white text-base sm:text-lg leading-none">{promotion.name}</p>
-                        <span className="text-sm sm:text-base font-bold text-white whitespace-nowrap leading-none">
+                    </div>
+                    <div className="flex-1 px-2.5 flex items-center justify-between h-full min-w-0 gap-2">
+                        <p className="font-bold text-white text-sm sm:text-base leading-none truncate">{promotion.name}</p>
+                        <span className="text-sm sm:text-base font-bold text-white whitespace-nowrap leading-none shrink-0">
                             -{formatCurrencyCOP(discountAmount)}
                         </span>
                     </div>
