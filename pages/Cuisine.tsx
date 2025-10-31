@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { ChefHat } from 'lucide-react';
 import { api } from '../services/api';
 import { KitchenTicket as KitchenTicketOrder } from '../types';
 import { useAuth } from '../contexts/AuthContext';
@@ -87,61 +86,74 @@ const KitchenTicketCard: React.FC<{ order: KitchenTicketOrder; onReady: (orderId
     const nameClass = computeNameSizeClass(displayName);
 
     return (
-        <div className={`flex h-full min-w-[22rem] flex-col overflow-hidden rounded-xl text-gray-900 shadow-lg transition-shadow duration-300 hover:shadow-xl ${urgencyStyles.border} ${urgencyStyles.background}`}>
-            <div className="flex flex-col gap-1.5 px-5 py-4">
-                <div className="flex items-start justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                        <h3 className={`font-semibold leading-tight text-gray-900 ${nameClass}`}>
-                            <span className="block max-w-full break-words text-balance">{displayName}</span>
-                        </h3>
-                        <p className="text-xs font-medium text-gray-500">
+        <div className={`relative flex h-full flex-col overflow-hidden rounded-xl border text-gray-900 shadow-md transition-shadow duration-300 hover:shadow-lg ${urgencyStyles.border} ${urgencyStyles.background}`}>
+            <span aria-hidden className={`absolute inset-y-0 left-0 w-1 ${urgencyStyles.accent}`} />
+            <header className="border-b border-gray-200 px-5 pt-3 pb-2">
+                <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                    <div className="min-w-0 space-y-0.5">
+                        <h4 className="truncate text-base font-semibold leading-tight text-gray-900 sm:text-lg md:text-xl">{displayName}</h4>
+                        <p className="text-xs text-gray-500">
                             Pedido a las {sentAtFormatted}
                         </p>
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold uppercase text-white shadow ${urgencyStyles.accent}`}>
-                            <span>ITEMS</span>
-                            <span className="text-base">{totalProducts}</span>
-                        </span>
-                        <OrderTimer
-                            startTime={order.date_envoi_cuisine || Date.now()}
-                            variant="chip"
-                            accentClassName={urgencyStyles.accent}
-                        />
+                    <div className="flex flex-col items-start gap-1 sm:items-end">
+                        <div className="flex w-full justify-start sm:justify-end">
+                            <OrderTimer startTime={order.date_envoi_cuisine || Date.now()} className=" text-sm sm:text-base" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex-1 overflow-y-auto px-5">
-                <ul className="space-y-2 pb-4">
-                    {groupedItems.map((item) => (
-                        <li key={item.key} className="min-w-[22rem] rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white shadow-md ${urgencyStyles.accent}`}>
-                                    {item.quantite}
-                                </span>
-                                <p className="text-[clamp(1rem,2.1vw,1.35rem)] font-semibold leading-tight text-gray-900 whitespace-nowrap">
-                                    {item.nom_produit}
-                                </p>
-                            </div>
-                            {item.commentaire && (
-                                <p className="mt-2 rounded-md border border-dashed border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium italic text-blue-800">
-                                    {item.commentaire}
+            </header>
+
+            <div className="flex-1 overflow-hidden px-5 pt-2 pb-4">
+                <div className="flex h-full flex-col gap-1">
+                    <section className="flex flex-col overflow-hidden gap-1">
+                        <h5 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">Artículos</h5>
+                        <div className="flex-1 overflow-y-auto pr-1">
+                            {groupedItems.length > 0 ? (
+                                <ul className="space-y-0.5">
+                                    {groupedItems.map((item) => {
+                                        const note = item.commentaire?.trim();
+                                        return (
+                                            <li key={item.key} className="flex items-stretch rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-900 shadow-sm overflow-hidden min-h-[3.5rem]">
+                                                <div className="flex flex-1 items-center justify-between gap-3 pr-3">
+                                                    <div className="flex flex-1 items-center">
+                                                        <span className={`flex self-stretch w-12 shrink-0 items-center justify-center text-xl font-bold text-white shadow-md ${urgencyStyles.accent} rounded-l-lg`}>
+                                                            {item.quantite}
+                                                        </span>
+                                                        <span className="font-semibold text-gray-900 text-[clamp(1.1rem,2.1vw,1.3rem)] leading-snug break-words text-balance whitespace-normal [hyphens:auto] px-3 py-3">
+                                                            {item.nom_produit}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {note && (
+                                                    <p className="mt-2 rounded-md border border-dashed border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium italic text-blue-800 ml-14 mr-3">
+                                                        {note}
+                                                    </p>
+                                                )}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ) : (
+                                <p className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-xs text-gray-500 shadow-sm">
+                                    Este pedido aún no tiene artículos registrados.
                                 </p>
                             )}
-                        </li>
-                    ))}
-                </ul>
+                        </div>
+                    </section>
+                </div>
             </div>
+
             {canMarkReady && (
-                <div className="border-t border-gray-200 px-5 pb-5 pt-4">
+                <footer className="border-t border-gray-200 px-5 pb-5 pt-4">
                     <button
                         onClick={() => onReady(order.id, order.date_envoi_cuisine)}
-                        className="group inline-flex w-full items-center justify-center gap-3 rounded-lg border-2 border-transparent bg-black px-4 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-sm transition hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/70 focus-visible:ring-offset-2"
+                        className="w-full ui-btn ui-btn-success uppercase"
+                        type="button"
                     >
-                        <ChefHat size={20} className="shrink-0" />
-                        <span>LISTO</span>
+                        Listo
                     </button>
-                </div>
+                </footer>
             )}
         </div>
     );
