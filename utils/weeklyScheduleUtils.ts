@@ -50,10 +50,10 @@ export const isWithinWeeklySchedule = (
   const currentMinutes = referenceDate.getHours() * 60 + referenceDate.getMinutes();
 
   if (start < end) {
-    return currentMinutes >= start && currentMinutes < end;
+    return currentMinutes >= start && currentMinutes <= end;
   }
 
-  return currentMinutes >= start || currentMinutes < end;
+  return currentMinutes >= start || currentMinutes <= end;
 };
 
 export const formatWeeklySchedule = (

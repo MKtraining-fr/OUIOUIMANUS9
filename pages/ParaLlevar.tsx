@@ -9,6 +9,7 @@ import { formatCurrencyCOP } from '../utils/formatIntegerAmount';
 import useSiteContent from '../hooks/useSiteContent';
 import useOnlineOrderingSchedules from '../hooks/useOnlineOrderingSchedules';
 import { formatScheduleWindow, isWithinSchedule } from '../utils/timeWindow';
+import { isWithinWeeklySchedule } from '../utils/weeklyScheduleUtils';
 
 
 const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => void, onDeliver?: (orderId: string) => void, isProcessing?: boolean }> = ({ order, onValidate, onDeliver, isProcessing }) => {
@@ -253,9 +254,8 @@ const ParaLlevar: React.FC = () => {
     }, [weeklySchedule, editingSchedule]);
 
     const isCurrentlyOnline = useMemo(() => {
-        if (!siteContent) return false;
-        return isWithinSchedule(siteContent.onlineOrdering.schedule, now);
-    }, [siteContent, now]);
+        return isWithinWeeklySchedule(weeklySchedule, now);
+    }, [weeklySchedule, now]);
 
     const todaySchedule = useMemo(() => {
         if (!weeklySchedule) return null;
