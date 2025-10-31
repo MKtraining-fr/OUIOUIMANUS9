@@ -21,6 +21,7 @@ import {
   Sale,
   RoleLogin,
   SiteContent,
+  WeeklySchedule,
 } from '../types';
 import { ROLE_HOME_PAGE_META_KEY, ROLES, SITE_CUSTOMIZER_PERMISSION_KEY } from '../constants';
 import { resolveSiteContent, sanitizeSiteContentInput } from '../utils/siteContent';
@@ -2717,5 +2718,78 @@ export const api = {
     fetchSince: fetchRoleLoginsSince,
     clearBefore: clearRoleLoginsBefore,
     log: logRoleLogin,
+  },
+
+  getOnlineOrderingSchedules: async (): Promise<WeeklySchedule | null> => {
+    const response = await supabase
+      .from('online_ordering_schedules')
+      .select('day_of_week, start_time, end_time, closed')
+      .order('day_of_week');
+
+    const rows = unwrap<Array<{
+      day_of_week: keyof WeeklySchedule;
+      start_time: string;
+      end_time: string;
+      closed: boolean;
+    }>>(response as SupabaseResponse<Array<{
+      day_of_week: keyof WeeklySchedule;
+      start_time: string;
+      end_time: string;
+      closed: boolean;
+    }>>);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    const schedule: Partial<WeeklySchedule> = {};
+    for (const row of rows) {
+      schedule[row.day_of_week] = {
+        startTime: row.start_time,
+        endTime: row.end_time,
+        closed: row.closed,
+      };
+    }
+
+    return schedule as WeeklySchedule;
+  },
+
+  updateOnlineOrderingSchedules: async (weeklySchedule: WeeklySchedule): Promise<WeeklySchedule> => {
+    const days: Array<keyof WeeklySchedule> = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    const upsertData = days.map(day => ({
+      day_of_week: day,
+      start_time: weeklySchedule[day].startTime,
+      end_time: weeklySchedule[day].endTime,
+      closed: weeklySchedule[day].closed,
+    }));
+
+    const response = await supabase
+      .from('online_ordering_schedules')
+      .upsert(upsertData, { onConflict: 'day_of_week' })
+      .select('day_of_week, start_time, end_time, closed');
+
+    const rows = unwrap<Array<{
+      day_of_week: keyof WeeklySchedule;
+      start_time: string;
+      end_time: string;
+      closed: boolean;
+    }>>(response as SupabaseResponse<Array<{
+      day_of_week: keyof WeeklySchedule;
+      start_time: string;
+      end_time: string;
+      closed: boolean;
+    }>>);
+
+    const schedule: Partial<WeeklySchedule> = {};
+    for (const row of rows) {
+      schedule[row.day_of_week] = {
+        startTime: row.start_time,
+        endTime: row.end_time,
+        closed: row.closed,
+      };
+    }
+
+    return schedule as WeeklySchedule;
   },
 };

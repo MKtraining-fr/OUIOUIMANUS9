@@ -24,6 +24,8 @@ import { getHomeRedirectPath } from '../utils/navigation';
 import { DEFAULT_SITE_CONTENT as UTILS_DEFAULT_SITE_CONTENT } from '../utils/siteContent';
 import { withAppendedQueryParam } from '../utils/url';
 import { formatScheduleWindow, isWithinSchedule, minutesUntilNextChange } from '../utils/timeWindow';
+import { isWithinWeeklySchedule, formatWeeklySchedule } from '../utils/weeklyScheduleUtils';
+import useOnlineOrderingSchedules from '../hooks/useOnlineOrderingSchedules';
 
 const DEFAULT_BRAND_LOGO = '/logo-brand.svg';
 
@@ -175,6 +177,7 @@ const Login: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const { content: siteContent, loading: siteContentLoading } = useSiteContent();
+  const { schedule: weeklySchedule } = useOnlineOrderingSchedules();
   const [content, setContent] = useState<SiteContent | null>(() => siteContent);
   useEffect(() => {
     if (siteContent) {
@@ -259,34 +262,12 @@ const Login: React.FC = () => {
     return () => window.clearInterval(interval);
   }, []);
 
-  const orderingSchedule = onlineOrdering.schedule;
-  const scheduleWindowLabel = useMemo(
-    () => formatScheduleWindow(orderingSchedule, 'fr-FR'),
-    [orderingSchedule.startTime, orderingSchedule.endTime],
+  const isOrderingAvailable = isWithinWeeklySchedule(weeklySchedule, now);
+  const weeklyScheduleFormatted = useMemo(
+    () => formatWeeklySchedule(weeklySchedule, 'fr-FR'),
+    [weeklySchedule],
   );
-  const isOrderingAvailable = isWithinSchedule(orderingSchedule, now);
-  const nextChangeMinutes = minutesUntilNextChange(orderingSchedule, now);
 
-  const countdownLabel = useMemo(() => {
-    if (nextChangeMinutes === null) {
-      return null;
-    }
-
-    if (nextChangeMinutes < 1) {
-      return 'Réouverture imminente';
-    }
-
-    if (nextChangeMinutes < 60) {
-      return `Réouverture dans environ ${nextChangeMinutes} min`;
-    }
-
-    const hours = Math.floor(nextChangeMinutes / 60);
-    const minutes = nextChangeMinutes % 60;
-    if (minutes === 0) {
-      return `Réouverture dans environ ${hours} h`;
-    }
-    return `Réouverture dans environ ${hours} h ${minutes.toString().padStart(2, '0')} min`;
-  }, [nextChangeMinutes]);
 
   const getRichTextHtml = (key: EditableElementKey): string | null => {
     const entry = elementRichText[key];
@@ -634,13 +615,21 @@ const Login: React.FC = () => {
                     <Clock size={28} />
                   </div>
                   <div className="hero-availability__content">
-                    <p className="hero-availability__label">Commandes en ligne indisponibles</p>
                     <p className="hero-availability__title">{onlineOrdering.closedTitle}</p>
                     <p className="hero-availability__subtitle">
-                      {onlineOrdering.closedSubtitle || `Revenez entre ${scheduleWindowLabel}.`}
+                      {onlineOrdering.closedSubtitle || 'Veuillez consulter nos horaires ci-dessous.'}
                     </p>
-                    <p className="hero-availability__hours">{scheduleWindowLabel}</p>
-                    {countdownLabel && <p className="hero-availability__countdown">{countdownLabel}</p>}
+                    <div className="mt-4 space-y-2">
+                      <p className="text-sm font-semibold uppercase tracking-wide text-white/90">Horaires d'ouverture :</p>
+                      <div className="space-y-1">
+                        {weeklyScheduleFormatted.map(({ day, label, schedule }) => (
+                          <div key={day} className="flex items-center text-sm">
+                            <span className="font-medium text-white/80 w-24">{label}</span>
+                            <span className="font-semibold text-white">{schedule}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

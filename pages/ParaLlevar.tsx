@@ -7,6 +7,7 @@ import OrderTimer from '../components/OrderTimer';
 import { getOrderUrgencyStyles } from '../utils/orderUrgency';
 import { formatCurrencyCOP } from '../utils/formatIntegerAmount';
 import useSiteContent from '../hooks/useSiteContent';
+import useOnlineOrderingSchedules from '../hooks/useOnlineOrderingSchedules';
 import { formatScheduleWindow, isWithinSchedule } from '../utils/timeWindow';
 
 
@@ -215,7 +216,8 @@ const ParaLlevar: React.FC = () => {
     const [readyOrders, setReadyOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [processingOrderId, setProcessingOrderId] = useState<string | null>(null);
-    const { content: siteContent, updateContent, loading: siteContentLoading } = useSiteContent();
+    const { content: siteContent, loading: siteContentLoading } = useSiteContent();
+    const { schedule: weeklySchedule, updateSchedule, loading: scheduleLoading } = useOnlineOrderingSchedules();
     const [savingSchedule, setSavingSchedule] = useState(false);
     const [scheduleFeedback, setScheduleFeedback] = useState<{ message: string; tone: 'success' | 'error' } | null>(null);
     const [now, setNow] = useState(() => new Date());
@@ -242,22 +244,13 @@ const ParaLlevar: React.FC = () => {
         { key: 'sunday', label: 'Dimanche' },
     ];
 
-    const [weeklySchedule, setWeeklySchedule] = useState<WeeklySchedule>({
-        monday: { startTime: '11:00', endTime: '23:00', closed: false },
-        tuesday: { startTime: '11:00', endTime: '23:00', closed: false },
-        wednesday: { startTime: '11:00', endTime: '23:00', closed: false },
-        thursday: { startTime: '11:00', endTime: '23:00', closed: false },
-        friday: { startTime: '11:00', endTime: '23:00', closed: false },
-        saturday: { startTime: '11:00', endTime: '23:00', closed: false },
-        sunday: { startTime: '11:00', endTime: '23:00', closed: false },
-    });
+    const [editingSchedule, setEditingSchedule] = useState<WeeklySchedule | null>(null);
 
     useEffect(() => {
-        if (!siteContent?.onlineOrdering.schedule.weeklySchedule) {
-            return;
+        if (weeklySchedule && !editingSchedule) {
+            setEditingSchedule(weeklySchedule);
         }
-        setWeeklySchedule(siteContent.onlineOrdering.schedule.weeklySchedule);
-    }, [siteContent]);
+    }, [weeklySchedule, editingSchedule]);
 
     const isCurrentlyOnline = useMemo(() => {
         if (!siteContent) return false;
@@ -265,29 +258,21 @@ const ParaLlevar: React.FC = () => {
     }, [siteContent, now]);
 
     const todaySchedule = useMemo(() => {
+        if (!weeklySchedule) return null;
         const dayMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
         const dayKey = dayMap[now.getDay()];
         return weeklySchedule[dayKey];
     }, [now, weeklySchedule]);
 
     const handleScheduleSubmit = useCallback(async () => {
-        if (!siteContent) {
+        if (!editingSchedule) {
             return;
         }
 
         setSavingSchedule(true);
         setScheduleFeedback(null);
         try {
-            await updateContent({
-                ...siteContent,
-                onlineOrdering: {
-                    ...siteContent.onlineOrdering,
-                    schedule: {
-                        ...siteContent.onlineOrdering.schedule,
-                        weeklySchedule,
-                    },
-                },
-            });
+            await updateSchedule(editingSchedule);
             setScheduleFeedback({ message: 'Horaires mis à jour avec succès.', tone: 'success' });
             setIsScheduleModalOpen(false);
         } catch (error) {
@@ -297,7 +282,7 @@ const ParaLlevar: React.FC = () => {
         } finally {
             setSavingSchedule(false);
         }
-    }, [siteContent, weeklySchedule, updateContent]);
+    }, [editingSchedule, updateSchedule]);
 
     const fetchOrders = useCallback(async () => {
         // Don't set loading to true on refetches for a smoother experience
@@ -408,26 +393,26 @@ const ParaLlevar: React.FC = () => {
                                 <label className="flex items-center gap-1">
                                     <input
                                         type="checkbox"
-                                        checked={weeklySchedule[key].closed}
-                                        onChange={(e) => setWeeklySchedule({
-                                            ...weeklySchedule,
-                                            [key]: { ...weeklySchedule[key], closed: e.target.checked }
+                                        checked={editingSchedule?.[key]?.closed ?? false}
+                                        onChange={(e) => editingSchedule && setEditingSchedule({
+                                            ...editingSchedule,
+                                            [key]: { ...editingSchedule[key], closed: e.target.checked }
                                         })}
                                         className="h-3 w-3 rounded border-gray-300 text-blue-600 focus:ring-1 focus:ring-blue-500"
                                     />
                                     <span className="text-[10px] text-gray-700">Fermé</span>
                                 </label>
                             </div>
-                            {!weeklySchedule[key].closed && (
+                            {editingSchedule && !editingSchedule[key].closed && (
                                 <div className="flex gap-1.5">
                                     <label className="flex flex-col gap-0.5 flex-1">
                                         <span className="text-[9px] font-medium text-gray-600">Ouverture</span>
                                         <input
                                             type="time"
-                                            value={weeklySchedule[key].startTime}
-                                            onChange={(e) => setWeeklySchedule({
-                                                ...weeklySchedule,
-                                                [key]: { ...weeklySchedule[key], startTime: e.target.value }
+                                            value={editingSchedule[key].startTime}
+                                            onChange={(e) => setEditingSchedule({
+                                                ...editingSchedule,
+                                                [key]: { ...editingSchedule[key], startTime: e.target.value }
                                             })}
                                             className="w-full rounded border border-gray-300 bg-white px-1.5 py-0.5 text-[11px] text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
                                         />
@@ -436,10 +421,10 @@ const ParaLlevar: React.FC = () => {
                                         <span className="text-[9px] font-medium text-gray-600">Fermeture</span>
                                         <input
                                             type="time"
-                                            value={weeklySchedule[key].endTime}
-                                            onChange={(e) => setWeeklySchedule({
-                                                ...weeklySchedule,
-                                                [key]: { ...weeklySchedule[key], endTime: e.target.value }
+                                            value={editingSchedule[key].endTime}
+                                            onChange={(e) => setEditingSchedule({
+                                                ...editingSchedule,
+                                                [key]: { ...editingSchedule[key], endTime: e.target.value }
                                             })}
                                             className="w-full rounded border border-gray-300 bg-white px-1.5 py-0.5 text-[11px] text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
                                         />

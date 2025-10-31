@@ -14,6 +14,8 @@ import ActivePromotionsDisplay from '../components/ActivePromotionsDisplay';
 import { fetchActivePromotions, applyPromotionsToOrder, fetchPromotionByCode } from '../services/promotionsApi';
 import useSiteContent from '../hooks/useSiteContent';
 import { formatScheduleWindow, isWithinSchedule, minutesUntilNextChange } from '../utils/timeWindow';
+import { isWithinWeeklySchedule, formatWeeklySchedule } from '../utils/weeklyScheduleUtils';
+import useOnlineOrderingSchedules from '../hooks/useOnlineOrderingSchedules';
 import { DEFAULT_SITE_CONTENT } from '../utils/siteContent';
 import { createHeroBackgroundStyle } from '../utils/siteStyleHelpers';
 import OrderConfirmationModal from '../components/OrderConfirmationModal';
@@ -193,6 +195,7 @@ interface OrderMenuViewProps {
 const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
     const navigate = useNavigate();
     const { content: siteContent } = useSiteContent();
+    const { schedule: weeklySchedule } = useOnlineOrderingSchedules();
     const safeContent = siteContent ?? DEFAULT_SITE_CONTENT;
     const heroBackgroundStyle = useMemo(
         () => createHeroBackgroundStyle(safeContent.hero.style, safeContent.hero.backgroundImage),
@@ -235,35 +238,12 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
         return () => window.clearInterval(interval);
     }, []);
 
-    const orderingSchedule = safeContent.onlineOrdering.schedule;
-    const scheduleWindowLabel = useMemo(
-        () => formatScheduleWindow(orderingSchedule, 'fr-FR'),
-        [orderingSchedule.startTime, orderingSchedule.endTime],
+    const isOrderingAvailable = isWithinWeeklySchedule(weeklySchedule, now);
+    const weeklyScheduleFormatted = useMemo(
+        () => formatWeeklySchedule(weeklySchedule, 'es-ES'),
+        [weeklySchedule],
     );
-    const isOrderingAvailable = isWithinSchedule(orderingSchedule, now);
-    const countdownMinutes = minutesUntilNextChange(orderingSchedule, now);
 
-    const countdownLabel = useMemo(() => {
-        if (countdownMinutes === null) {
-            return null;
-        }
-
-        if (countdownMinutes < 1) {
-            return 'Réouverture imminente';
-        }
-
-        if (countdownMinutes < 60) {
-            return `Réouverture dans environ ${countdownMinutes} min`;
-        }
-
-        const hours = Math.floor(countdownMinutes / 60);
-        const minutes = countdownMinutes % 60;
-        if (minutes === 0) {
-            return `Réouverture dans environ ${hours} h`;
-        }
-
-        return `Réouverture dans environ ${hours} h ${minutes.toString().padStart(2, '0')} min`;
-    }, [countdownMinutes]);
     const [freeShippingMinAmount, setFreeShippingMinAmount] = useState<number>(80000);
     const [orderType, setOrderType] = useState<'pedir_en_linea' | 'a_emporter'>('pedir_en_linea');
 
@@ -577,14 +557,21 @@ const OrderMenuView: React.FC<OrderMenuViewProps> = ({ onOrderSubmitted }) => {
                         </div>
                         <h1 className="mt-6 text-3xl font-bold sm:text-4xl">{safeContent.onlineOrdering.closedTitle}</h1>
                         <p className="mt-3 text-lg text-white/85">
-                            {safeContent.onlineOrdering.closedSubtitle || `Revenez entre ${scheduleWindowLabel} pour passer commande.`}
+                            {safeContent.onlineOrdering.closedSubtitle || 'Por favor consulte nuestros horarios a continuación.'}
                         </p>
-                        <p className="mt-6 text-sm font-semibold uppercase tracking-[0.3em] text-white/70">
-                            Horaires : {scheduleWindowLabel}
-                        </p>
-                        {countdownLabel && (
-                            <p className="mt-2 text-sm font-medium text-white/80">{countdownLabel}</p>
-                        )}
+                        <div className="mt-6 space-y-3 rounded-2xl bg-black/20 p-6 backdrop-blur-sm">
+                            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/90">
+                                Horarios de atención:
+                            </p>
+                            <div className="space-y-2">
+                                {weeklyScheduleFormatted.map(({ day, label, schedule }) => (
+                                    <div key={day} className="flex items-center text-base">
+                                        <span className="font-medium text-white/80 w-24">{label}</span>
+                                        <span className="font-semibold text-white">{schedule}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                             <button
                                 type="button"
