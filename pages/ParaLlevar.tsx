@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { api } from '../services/api';
-import { Order, OrderItem } from '../types';
+import { Order, OrderItem, WeeklySchedule } from '../types';
 import { Clock, Eye, User, MapPin, Phone } from 'lucide-react';
 import Modal from '../components/Modal';
 import OrderTimer from '../components/OrderTimer';
@@ -122,12 +122,14 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                                                     key={`${promotion.promotion_id}-${promotion.name}`}
                                                     className="rounded-md border border-emerald-200 bg-white/70 px-3 py-2 text-emerald-900 shadow-sm"
                                                 >
-                                                    <p className="font-medium leading-tight">
-                                                        {promotion.name}{promoCode ? ` (Code: ${promoCode})` : ''}
-                                                    </p>
-                                                    <p className="mt-1 text-sm font-semibold text-emerald-700">
-                                                        -{formatCurrencyCOP(promotion.discount_amount || 0)}
-                                                    </p>
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <p className="font-medium leading-tight">
+                                                            {promotion.name}{promoCode ? ` (Code: ${promoCode})` : ''}
+                                                        </p>
+                                                        <p className="text-sm font-semibold text-emerald-700 whitespace-nowrap">
+                                                            -{formatCurrencyCOP(promotion.discount_amount || 0)}
+                                                        </p>
+                                                    </div>
                                                 </li>
                                             );
                                         })}
@@ -177,7 +179,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                     )}
                 </footer>
             </div>
-            <Modal isOpen={isReceiptModalOpen} onClose={() => setIsReceiptModalOpen(false)} title="Comprobante de pago">
+            <Modal isOpen={isReceiptModalOpen} onClose={() => setIsReceiptModalOpen(false)} title="Comprobante de pago" size="half">
                 {order.receipt_url ? (
                     <img src={order.receipt_url} alt="Comprobante" className="w-full h-auto rounded-md" />
                 ) : (
@@ -195,11 +197,10 @@ const ParaLlevar: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [processingOrderId, setProcessingOrderId] = useState<string | null>(null);
     const { content: siteContent, updateContent, loading: siteContentLoading } = useSiteContent();
-    const [startTime, setStartTime] = useState('11:00');
-    const [endTime, setEndTime] = useState('23:00');
     const [savingSchedule, setSavingSchedule] = useState(false);
     const [scheduleFeedback, setScheduleFeedback] = useState<{ message: string; tone: 'success' | 'error' } | null>(null);
     const [now, setNow] = useState(() => new Date());
+    const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -212,33 +213,40 @@ const ParaLlevar: React.FC = () => {
         return () => window.clearInterval(interval);
     }, []);
 
+    const daysOfWeek: Array<{ key: keyof WeeklySchedule; label: string }> = [
+        { key: 'monday', label: 'Lundi' },
+        { key: 'tuesday', label: 'Mardi' },
+        { key: 'wednesday', label: 'Mercredi' },
+        { key: 'thursday', label: 'Jeudi' },
+        { key: 'friday', label: 'Vendredi' },
+        { key: 'saturday', label: 'Samedi' },
+        { key: 'sunday', label: 'Dimanche' },
+    ];
+
+    const [weeklySchedule, setWeeklySchedule] = useState<WeeklySchedule>({
+        monday: { startTime: '11:00', endTime: '23:00', closed: false },
+        tuesday: { startTime: '11:00', endTime: '23:00', closed: false },
+        wednesday: { startTime: '11:00', endTime: '23:00', closed: false },
+        thursday: { startTime: '11:00', endTime: '23:00', closed: false },
+        friday: { startTime: '11:00', endTime: '23:00', closed: false },
+        saturday: { startTime: '11:00', endTime: '23:00', closed: false },
+        sunday: { startTime: '11:00', endTime: '23:00', closed: false },
+    });
+
     useEffect(() => {
-        if (!siteContent) {
+        if (!siteContent?.onlineOrdering.schedule.weeklySchedule) {
             return;
         }
-
-        setStartTime(siteContent.onlineOrdering.schedule.startTime);
-        setEndTime(siteContent.onlineOrdering.schedule.endTime);
+        setWeeklySchedule(siteContent.onlineOrdering.schedule.weeklySchedule);
     }, [siteContent]);
 
-    const schedulePreview = useMemo(
-        () => formatScheduleWindow({ startTime, endTime }, 'fr-FR'),
-        [startTime, endTime],
-    );
+    const isCurrentlyOnline = useMemo(() => {
+        if (!siteContent) return false;
+        return isWithinSchedule(siteContent.onlineOrdering.schedule, now);
+    }, [siteContent, now]);
 
-    const isScheduleValid = useMemo(() => {
-        const pattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
-        return pattern.test(startTime) && pattern.test(endTime);
-    }, [startTime, endTime]);
-
-    const isCurrentlyOnline = useMemo(
-        () => isWithinSchedule({ startTime, endTime }, now),
-        [endTime, now, startTime],
-    );
-
-    const handleScheduleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (!siteContent || !isScheduleValid) {
+    const handleScheduleSubmit = useCallback(async () => {
+        if (!siteContent) {
             return;
         }
 
@@ -250,12 +258,13 @@ const ParaLlevar: React.FC = () => {
                 onlineOrdering: {
                     ...siteContent.onlineOrdering,
                     schedule: {
-                        startTime,
-                        endTime,
+                        ...siteContent.onlineOrdering.schedule,
+                        weeklySchedule,
                     },
                 },
             });
             setScheduleFeedback({ message: 'Horaires mis à jour avec succès.', tone: 'success' });
+            setIsScheduleModalOpen(false);
         } catch (error) {
             console.error('Failed to update online ordering schedule', error);
             const message = error instanceof Error ? error.message : 'Impossible de mettre à jour les horaires.';
@@ -263,7 +272,7 @@ const ParaLlevar: React.FC = () => {
         } finally {
             setSavingSchedule(false);
         }
-    }, [endTime, isScheduleValid, siteContent, startTime, updateContent]);
+    }, [siteContent, weeklySchedule, updateContent]);
 
     const fetchOrders = useCallback(async () => {
         // Don't set loading to true on refetches for a smoother experience
@@ -321,22 +330,20 @@ const ParaLlevar: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-                <form onSubmit={handleScheduleSubmit} className="flex flex-col gap-6 p-6">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                                <Clock size={22} />
-                            </div>
-                            <div>
-                                <h2 className="text-base font-semibold text-gray-900">Disponibilité de la commande en ligne</h2>
-                                <p className="text-sm text-gray-500">
-                                    {siteContentLoading
-                                        ? 'Chargement des horaires...'
-                                        : `Plage actuelle : ${schedulePreview}`}
-                                </p>
-                            </div>
+            <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                            <Clock size={22} />
                         </div>
+                        <div>
+                            <h2 className="text-base font-semibold text-gray-900">Disponibilité de la commande en ligne</h2>
+                            <p className="text-sm text-gray-500">
+                                {siteContentLoading ? 'Chargement des horaires...' : 'Configurez les horaires par jour'}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
                         <span
                             className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
                                 isCurrentlyOnline
@@ -347,49 +354,95 @@ const ParaLlevar: React.FC = () => {
                             <span className={`h-2 w-2 rounded-full ${isCurrentlyOnline ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                             {isCurrentlyOnline ? 'Ouvert' : 'Fermé'}
                         </span>
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-gray-700">Heure de début</span>
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={event => setStartTime(event.target.value)}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-                                required
-                            />
-                        </label>
-                        <label className="flex flex-col gap-2">
-                            <span className="text-sm font-medium text-gray-700">Heure de fin</span>
-                            <input
-                                type="time"
-                                value={endTime}
-                                onChange={event => setEndTime(event.target.value)}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-                                required
-                            />
-                        </label>
-                    </div>
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        {scheduleFeedback && (
-                            <p
-                                className={`text-sm font-medium ${
-                                    scheduleFeedback.tone === 'success' ? 'text-emerald-600' : 'text-red-600'
-                                }`}
-                            >
-                                {scheduleFeedback.message}
-                            </p>
-                        )}
                         <button
-                            type="submit"
-                            disabled={!isScheduleValid || savingSchedule || !siteContent}
-                            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-300"
+                            onClick={() => setIsScheduleModalOpen(true)}
+                            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                            type="button"
                         >
-                            {savingSchedule ? 'Enregistrement...' : 'Enregistrer les horaires'}
+                            Configurer
                         </button>
                     </div>
-                </form>
+                </div>
+                {scheduleFeedback && (
+                    <p
+                        className={`mt-4 text-sm font-medium ${
+                            scheduleFeedback.tone === 'success' ? 'text-emerald-600' : 'text-red-600'
+                        }`}
+                    >
+                        {scheduleFeedback.message}
+                    </p>
+                )}
             </div>
+            
+            <Modal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} title="Configuration des horaires" size="lg">
+                <div className="space-y-4">
+                    {daysOfWeek.map(({ key, label }) => (
+                        <div key={key} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                            <div className="flex items-center justify-between gap-4 mb-3">
+                                <h3 className="font-semibold text-gray-900">{label}</h3>
+                                <label className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={weeklySchedule[key].closed}
+                                        onChange={(e) => setWeeklySchedule({
+                                            ...weeklySchedule,
+                                            [key]: { ...weeklySchedule[key], closed: e.target.checked }
+                                        })}
+                                        className="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <span className="text-sm text-gray-700">Fermé</span>
+                                </label>
+                            </div>
+                            {!weeklySchedule[key].closed && (
+                                <div className="grid grid-cols-2 gap-3">
+                                    <label className="flex flex-col gap-1">
+                                        <span className="text-xs font-medium text-gray-600">Ouverture</span>
+                                        <input
+                                            type="time"
+                                            value={weeklySchedule[key].startTime}
+                                            onChange={(e) => setWeeklySchedule({
+                                                ...weeklySchedule,
+                                                [key]: { ...weeklySchedule[key], startTime: e.target.value }
+                                            })}
+                                            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                        />
+                                    </label>
+                                    <label className="flex flex-col gap-1">
+                                        <span className="text-xs font-medium text-gray-600">Fermeture</span>
+                                        <input
+                                            type="time"
+                                            value={weeklySchedule[key].endTime}
+                                            onChange={(e) => setWeeklySchedule({
+                                                ...weeklySchedule,
+                                                [key]: { ...weeklySchedule[key], endTime: e.target.value }
+                                            })}
+                                            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                        />
+                                    </label>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                        <button
+                            onClick={() => setIsScheduleModalOpen(false)}
+                            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                            type="button"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            onClick={handleScheduleSubmit}
+                            disabled={savingSchedule}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+                            type="button"
+                        >
+                            {savingSchedule ? 'Enregistrement...' : 'Enregistrer'}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+            
             <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2">
                 {/* Column for validation */}
                 <div className="bg-gray-100 p-4 rounded-xl">

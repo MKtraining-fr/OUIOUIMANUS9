@@ -167,9 +167,26 @@ export interface SiteAssets {
   library: CustomizationAsset[];
 }
 
+export interface DailySchedule {
+  startTime: string;
+  endTime: string;
+  closed: boolean;
+}
+
+export interface WeeklySchedule {
+  monday: DailySchedule;
+  tuesday: DailySchedule;
+  wednesday: DailySchedule;
+  thursday: DailySchedule;
+  friday: DailySchedule;
+  saturday: DailySchedule;
+  sunday: DailySchedule;
+}
+
 export interface OnlineOrderingSchedule {
   startTime: string;
   endTime: string;
+  weeklySchedule?: WeeklySchedule;
 }
 
 export interface OnlineOrderingSettings {
