@@ -7,7 +7,7 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'half';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'half';
   anchor?: DOMRect | DOMRectReadOnly | null;
   boundary?: DOMRect | DOMRectReadOnly | null;
 }
@@ -24,6 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   boundary = null,
 }) => {
   const sizeClasses = {
+    xs: 'max-w-xs',
     sm: 'max-w-sm',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
@@ -186,8 +187,8 @@ const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby={headingId}
-        className={`fixed flex w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ${
-          anchor && boundary ? 'max-w-none' : size === 'half' ? 'lg:!w-[50vw] lg:!max-w-[50vw]' : sizeClasses[size]
+        className={`fixed flex flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ${
+          anchor && boundary ? 'w-full max-w-none' : size === 'half' ? 'w-full lg:!w-[50vw] lg:!max-w-[50vw]' : sizeClasses[size]
         } sm:max-h-[90vh] focus:outline-none`}
         style={{
           ...baseStyle,
