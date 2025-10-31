@@ -11,7 +11,7 @@ import { formatScheduleWindow, isWithinSchedule } from '../utils/timeWindow';
 
 
 const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => void, onDeliver?: (orderId: string) => void, isProcessing?: boolean }> = ({ order, onValidate, onDeliver, isProcessing }) => {
-    const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+    const [isReceiptVisible, setIsReceiptVisible] = useState(false);
 
     const displayName = order.table_nom || `Pedido #${order.id.slice(-6)}`;
     const timerStart = order.date_envoi_cuisine || order.date_creation;
@@ -25,7 +25,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
     const showPromotionDetails = hasAppliedPromotions;
 
     return (
-        <>
+        <div className="relative">
             <div className={`relative flex h-full flex-col overflow-hidden rounded-xl border text-gray-900 shadow-md transition-shadow duration-300 hover:shadow-lg ${urgencyStyles.border} ${urgencyStyles.background}`}>
                 <span aria-hidden className={`absolute inset-y-0 left-0 w-1 ${urgencyStyles.accent}`} />
                 <header className="border-b border-gray-200 px-5 pt-3 pb-2">
@@ -149,7 +149,7 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                     {(onValidate || onDeliver) && (
                         <div className="space-y-2">
                             <button
-                                onClick={() => setIsReceiptModalOpen(true)}
+                                onClick={() => setIsReceiptVisible(true)}
                                 className="w-full ui-btn ui-btn-secondary"
                                 type="button"
                             >
@@ -179,14 +179,33 @@ const TakeawayCard: React.FC<{ order: Order, onValidate?: (orderId: string) => v
                     )}
                 </footer>
             </div>
-            <Modal isOpen={isReceiptModalOpen} onClose={() => setIsReceiptModalOpen(false)} title="Comprobante de pago" size="half">
-                {order.receipt_url ? (
-                    <img src={order.receipt_url} alt="Comprobante" className="w-full h-auto rounded-md" />
-                ) : (
-                    <p>No se proporcionó comprobante.</p>
-                )}
-            </Modal>
-        </>
+            {isReceiptVisible && (
+                <div className="absolute inset-0 z-50 flex items-start justify-center">
+                    <div className="absolute inset-0 bg-black/50" onClick={() => setIsReceiptVisible(false)} />
+                    <div className="relative w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3 bg-gray-50">
+                            <h3 className="text-sm font-semibold text-gray-900">Comprobante de pago</h3>
+                            <button
+                                onClick={() => setIsReceiptVisible(false)}
+                                className="text-gray-500 hover:text-gray-700 transition"
+                                type="button"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-auto p-4">
+                            {order.receipt_url ? (
+                                <img src={order.receipt_url} alt="Comprobante" className="w-full h-auto rounded-md" />
+                            ) : (
+                                <p className="text-center text-gray-500">No se proporcionó comprobante.</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
@@ -244,6 +263,12 @@ const ParaLlevar: React.FC = () => {
         if (!siteContent) return false;
         return isWithinSchedule(siteContent.onlineOrdering.schedule, now);
     }, [siteContent, now]);
+
+    const todaySchedule = useMemo(() => {
+        const dayMap = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
+        const dayKey = dayMap[now.getDay()];
+        return weeklySchedule[dayKey];
+    }, [now, weeklySchedule]);
 
     const handleScheduleSubmit = useCallback(async () => {
         if (!siteContent) {
@@ -339,7 +364,7 @@ const ParaLlevar: React.FC = () => {
                         <div>
                             <h2 className="text-base font-semibold text-gray-900">Disponibilité de la commande en ligne</h2>
                             <p className="text-sm text-gray-500">
-                                {siteContentLoading ? 'Chargement des horaires...' : 'Configurez les horaires par jour'}
+                                {siteContentLoading ? 'Chargement des horaires...' : todaySchedule.closed ? "Aujourd'hui: Fermé" : `Aujourd'hui: ${todaySchedule.startTime} - ${todaySchedule.endTime}`}
                             </p>
                         </div>
                     </div>
@@ -374,13 +399,13 @@ const ParaLlevar: React.FC = () => {
                 )}
             </div>
             
-            <Modal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} title="Configuration des horaires" size="lg">
-                <div className="space-y-4">
+            <Modal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} title="Configuration des horaires" size="xs">
+                <div className="space-y-1.5">
                     {daysOfWeek.map(({ key, label }) => (
-                        <div key={key} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                            <div className="flex items-center justify-between gap-4 mb-3">
-                                <h3 className="font-semibold text-gray-900">{label}</h3>
-                                <label className="flex items-center gap-2">
+                        <div key={key} className="rounded border border-gray-200 bg-gray-50 p-1.5">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                                <h3 className="text-xs font-semibold text-gray-900">{label}</h3>
+                                <label className="flex items-center gap-1">
                                     <input
                                         type="checkbox"
                                         checked={weeklySchedule[key].closed}
@@ -388,15 +413,15 @@ const ParaLlevar: React.FC = () => {
                                             ...weeklySchedule,
                                             [key]: { ...weeklySchedule[key], closed: e.target.checked }
                                         })}
-                                        className="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                                        className="h-3 w-3 rounded border-gray-300 text-blue-600 focus:ring-1 focus:ring-blue-500"
                                     />
-                                    <span className="text-sm text-gray-700">Fermé</span>
+                                    <span className="text-[10px] text-gray-700">Fermé</span>
                                 </label>
                             </div>
                             {!weeklySchedule[key].closed && (
-                                <div className="grid grid-cols-2 gap-3">
-                                    <label className="flex flex-col gap-1">
-                                        <span className="text-xs font-medium text-gray-600">Ouverture</span>
+                                <div className="flex gap-1.5">
+                                    <label className="flex flex-col gap-0.5 flex-1">
+                                        <span className="text-[9px] font-medium text-gray-600">Ouverture</span>
                                         <input
                                             type="time"
                                             value={weeklySchedule[key].startTime}
@@ -404,11 +429,11 @@ const ParaLlevar: React.FC = () => {
                                                 ...weeklySchedule,
                                                 [key]: { ...weeklySchedule[key], startTime: e.target.value }
                                             })}
-                                            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                            className="w-full rounded border border-gray-300 bg-white px-1.5 py-0.5 text-[11px] text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
                                         />
                                     </label>
-                                    <label className="flex flex-col gap-1">
-                                        <span className="text-xs font-medium text-gray-600">Fermeture</span>
+                                    <label className="flex flex-col gap-0.5 flex-1">
+                                        <span className="text-[9px] font-medium text-gray-600">Fermeture</span>
                                         <input
                                             type="time"
                                             value={weeklySchedule[key].endTime}
@@ -416,17 +441,17 @@ const ParaLlevar: React.FC = () => {
                                                 ...weeklySchedule,
                                                 [key]: { ...weeklySchedule[key], endTime: e.target.value }
                                             })}
-                                            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                            className="w-full rounded border border-gray-300 bg-white px-1.5 py-0.5 text-[11px] text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/30"
                                         />
                                     </label>
                                 </div>
                             )}
                         </div>
                     ))}
-                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                    <div className="flex justify-end gap-1.5 pt-2 border-t border-gray-200">
                         <button
                             onClick={() => setIsScheduleModalOpen(false)}
-                            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+                            className="rounded border border-gray-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
                             type="button"
                         >
                             Annuler
@@ -434,7 +459,7 @@ const ParaLlevar: React.FC = () => {
                         <button
                             onClick={handleScheduleSubmit}
                             disabled={savingSchedule}
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
+                            className="rounded bg-blue-600 px-2.5 py-1 text-[11px] font-semibold text-white shadow transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
                             type="button"
                         >
                             {savingSchedule ? 'Enregistrement...' : 'Enregistrer'}
