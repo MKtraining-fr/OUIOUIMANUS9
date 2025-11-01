@@ -288,482 +288,454 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
         className="space-y-6 rounded-[2.5rem] border border-gray-200 bg-slate-50 p-6 shadow-inner"
         data-preview-boundary="true"
       >
-      <SectionCard zone="navigation" activeZone={activeZone}>
-        <EditableElement
-          id="navigation.style.background"
-          label="Modifier le fond de la navigation"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <header className="login-header" style={navigationBackgroundStyle}>
-            <div className="layout-container login-header__inner" style={navigationTextStyle}>
-              <div className="login-brand" style={navigationTextStyle}>
-                <EditableElement
-                  id="navigation.brandLogo"
-                  label="Modifier le logo principal"
-                  onEdit={onEdit}
-                  as="span"
-                  className="inline-flex items-center"
-                >
-                  <img
-                    src={brandLogo}
-                    alt={`Logo ${content.navigation.brand}`}
-                    className="login-brand__logo"
-                  />
-                </EditableElement>
+        <SectionCard zone="navigation" activeZone={activeZone}>
+          <EditableElement
+            id="navigation.style.background"
+            label="Modifier le fond de la navigation"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <header className="site-header" style={{ ...navigationBackgroundStyle, ...navigationTextStyle }}>
+              <div className="layout-container site-header__inner" style={navigationTextStyle}>
                 <EditableElement
                   id="navigation.brand"
                   label="Modifier le nom de la marque"
                   onEdit={onEdit}
-                  as="span"
-                  className="ml-3 inline-flex items-center"
-                  buttonClassName="-right-3 -top-3"
-                >
-                  {renderRichTextElement(
-                    'navigation.brand',
-                    'span',
-                    {
-                      className: 'login-brand__name',
-                      style: getElementTextStyle('navigation.brand'),
-                    },
-                    content.navigation.brand,
-                  )}
-                </EditableElement>
-              </div>
-              <nav className="login-nav" aria-label="Navigation principale">
-                <EditableElement
-                  id="navigation.links.home"
-                  label="Modifier le lien Accueil"
-                  onEdit={onEdit}
-                  as="span"
-                  className="inline-flex"
+                  className="flex-shrink-0"
                   buttonClassName="-right-2 -top-2"
                 >
-                  {renderRichTextElement(
-                    'navigation.links.home',
-                    'span',
-                    {
-                      className: 'login-nav__link',
-                      style: getElementBodyTextStyle('navigation.links.home'),
-                    },
-                    content.navigation.links.home,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="navigation.links.about"
-                  label="Modifier le lien À propos"
-                  onEdit={onEdit}
-                  as="span"
-                  className="inline-flex"
-                  buttonClassName="-right-2 -top-2"
-                >
-                  {renderRichTextElement(
-                    'navigation.links.about',
-                    'span',
-                    {
-                      className: 'login-nav__link',
-                      style: getElementBodyTextStyle('navigation.links.about'),
-                    },
-                    content.navigation.links.about,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="navigation.links.menu"
-                  label="Modifier le lien Menu"
-                  onEdit={onEdit}
-                  as="span"
-                  className="inline-flex"
-                  buttonClassName="-right-2 -top-2"
-                >
-                  {renderRichTextElement(
-                    'navigation.links.menu',
-                    'span',
-                    {
-                      className: 'login-nav__link',
-                      style: getElementBodyTextStyle('navigation.links.menu'),
-                    },
-                    content.navigation.links.menu,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="navigation.links.loginCta"
-                  label="Modifier le bouton personnel"
-                  onEdit={onEdit}
-                  as="span"
-                  className="inline-flex"
-                  buttonClassName="-right-2 -top-2"
-                >
-                  <div
-                    className="login-nav__staff-btn"
-                    aria-label={content.navigation.links.loginCta}
-                    role="img"
-                  >
+                  <a href="/" className="login-brand" style={navigationTextStyle}>
                     <EditableElement
-                      id="navigation.staffLogo"
-                      label="Modifier le logo d'accès staff"
+                      id="navigation.brandLogo"
+                      label="Modifier le logo de la marque"
                       onEdit={onEdit}
-                      as="span"
-                      className="inline-flex"
+                      className="block"
                       buttonClassName="-right-2 -top-2"
                     >
-                      <img src={staffTriggerLogo} alt="" className="login-brand__logo" aria-hidden="true" />
+                      <img src={brandLogo} alt="" className="login-brand__logo" aria-hidden="true" />
                     </EditableElement>
-                  </div>
-                </EditableElement>
-              </nav>
-            </div>
-          </header>
-        </EditableElement>
-      </SectionCard>
-
-      <SectionCard zone="hero" activeZone={activeZone}>
-        <EditableElement
-          id="hero.backgroundImage"
-          label="Modifier le visuel de fond du hero"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <section className="section section-hero" style={{ ...heroBackgroundStyle, ...heroTextStyle }}>
-            <div className="section-hero__inner">
-              <div className="hero-content" style={heroTextStyle}>
-                <EditableElement
-                  id="hero.title"
-                  label="Modifier le titre du hero"
-                  onEdit={onEdit}
-                  className="block"
-                  buttonClassName="right-0 -top-3"
-                >
-                  {renderRichTextElement(
-                    'hero.title',
-                    'h2',
-                    {
-                      className: 'hero-title',
-                      style: getElementTextStyle('hero.title'),
-                    },
-                    content.hero.title,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="hero.subtitle"
-                  label="Modifier le sous-titre du hero"
-                  onEdit={onEdit}
-                  className="mt-4 block"
-                  buttonClassName="right-0 -top-3"
-                >
-                  {renderRichTextElement(
-                    'hero.subtitle',
-                    'p',
-                    {
-                      className: 'hero-subtitle',
-                      style: getElementBodyTextStyle('hero.subtitle'),
-                    },
-                    content.hero.subtitle,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="hero.ctaLabel"
-                  label="Modifier le texte du bouton principal"
-                  onEdit={onEdit}
-                  className="mt-6 inline-flex"
-                  buttonClassName="-right-3 -top-3"
-                >
-                  <button
-                    type="button"
-                    className="ui-btn ui-btn-accent hero-cta"
-                    style={{
-                      ...getElementBodyTextStyle('hero.ctaLabel'),
-                      ...getElementBackgroundStyle('hero.ctaLabel'),
-                    }}
-                    disabled
-                  >
                     {renderRichTextElement(
-                      'hero.ctaLabel',
+                      'navigation.brand',
                       'span',
                       {
-                        className: 'inline-flex items-center justify-center',
-                        style: getElementBodyTextStyle('hero.ctaLabel'),
+                        className: 'login-brand__text',
+                        style: getElementTextStyle('navigation.brand'),
                       },
-                      content.hero.ctaLabel,
+                      content.navigation.brand,
                     )}
-                  </button>
+                  </a>
                 </EditableElement>
-                <div className="hero-history mt-6">
-                <EditableElement
-                  id="hero.historyTitle"
-                  label="Modifier le titre de l'historique"
-                  onEdit={onEdit}
-                  className="block"
-                  buttonClassName="right-0 -top-3"
-                >
-                  {renderRichTextElement(
-                    'hero.historyTitle',
-                    'p',
-                    {
-                      className: 'hero-history__title',
-                      style: getElementBodyTextStyle('hero.historyTitle'),
-                    },
-                    content.hero.historyTitle,
-                  )}
-                </EditableElement>
-                <EditableElement
-                  id="hero.reorderCtaLabel"
-                  label="Modifier le bouton de réassort"
-                  onEdit={onEdit}
-                  className="hero-history__list"
-                  buttonClassName="right-2 top-2"
-                >
-                  <>
-                    {[0, 1, 2].map(index => (
-                      <div key={index} className="hero-history__item">
-                        <div className="hero-history__meta">
-                          <p className="hero-history__date" style={heroBodyTextStyle}>
-                            Pedido del 12/03/2024
-                          </p>
-                          <p className="hero-history__details" style={heroBodyTextStyle}>
-                            2 article(s) • {formatCurrencyCOP(32000)}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          className="hero-history__cta"
-                          style={{
-                            ...getElementBodyTextStyle('hero.reorderCtaLabel'),
-                            ...getElementBackgroundStyle('hero.reorderCtaLabel'),
-                          }}
-                          disabled
-                        >
-                          {renderRichTextElement(
-                            'hero.reorderCtaLabel',
-                            'span',
-                            {
-                              className: 'inline-flex items-center justify-center',
-                              style: getElementBodyTextStyle('hero.reorderCtaLabel'),
-                            },
-                            content.hero.reorderCtaLabel,
-                          )}
-                        </button>
-                      </div>
-                    ))}
-                  </>
-                </EditableElement>
-                </div>
-              </div>
-            </div>
-          </section>
-        </EditableElement>
-      </SectionCard>
-
-      <SectionCard zone="about" activeZone={activeZone}>
-        <EditableElement
-          id="about.style.background"
-          label="Modifier le fond de la section À propos"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <section className="section section-surface" style={{ ...aboutBackgroundStyle, ...aboutTextStyle }}>
-            <div className="section-inner section-inner--center" style={aboutTextStyle}>
-              <EditableElement
-                id="about.title"
-                label="Modifier le titre À propos"
-                onEdit={onEdit}
-                className="block"
-                buttonClassName="right-0 -top-3"
-              >
-                {renderRichTextElement(
-                  'about.title',
-                  'h2',
-                  {
-                    className: 'section-title',
-                    style: getElementTextStyle('about.title'),
-                  },
-                  content.about.title,
-                )}
-              </EditableElement>
-              <EditableElement
-                id="about.description"
-                label="Modifier la description À propos"
-                onEdit={onEdit}
-                className="mt-4 block"
-                buttonClassName="right-0 -top-3"
-              >
-                {renderRichTextElement(
-                  'about.description',
-                  'p',
-                  {
-                    className: 'section-text section-text--muted',
-                    style: getElementBodyTextStyle('about.description'),
-                  },
-                  content.about.description,
-                )}
-              </EditableElement>
-              {content.about.image && (
-                <EditableElement
-                  id="about.image"
-                  label="Modifier l'image À propos"
-                  onEdit={onEdit}
-                  className="mt-6 block"
-                  buttonClassName="right-4 top-4"
-                >
-                  <img
-                    src={content.about.image}
-                    alt={content.about.title}
-                    className="h-64 w-full rounded-xl object-cover shadow-lg"
-                  />
-                </EditableElement>
-              )}
-            </div>
-          </section>
-        </EditableElement>
-      </SectionCard>
-
-      <SectionCard zone="menu" activeZone={activeZone}>
-        <EditableElement
-          id="menu.style.background"
-          label="Modifier le fond de la section Menu"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <section className="section section-muted" style={{ ...menuBackgroundStyle, ...menuTextStyle }}>
-            <div className="section-inner section-inner--wide section-inner--center" style={menuTextStyle}>
-              <EditableElement
-                id="menu.title"
-                label="Modifier le titre du menu"
-                onEdit={onEdit}
-                className="block"
-                buttonClassName="right-0 -top-3"
-              >
-                {renderRichTextElement(
-                  'menu.title',
-                  'h2',
-                  {
-                    className: 'section-title',
-                    style: getElementTextStyle('menu.title'),
-                  },
-                  content.menu.title,
-                )}
-              </EditableElement>
-              {content.menu.image && (
-                <EditableElement
-                  id="menu.image"
-                  label="Modifier l'image du menu"
-                  onEdit={onEdit}
-                  className="mb-8 block"
-                  buttonClassName="right-4 top-4"
-                >
-                  <img
-                    src={content.menu.image}
-                    alt={content.menu.title}
-                    className="h-64 w-full rounded-xl object-cover shadow-lg"
-                  />
-                </EditableElement>
-              )}
-              <div className="menu-grid">
-                {bestSellerProducts.length > 0 ? (
-                  bestSellerProducts.map(product => {
-                    const hasImage = Boolean(product.image);
-                    return (
-                      <article key={product.id} className="ui-card menu-card">
-                        {hasImage ? (
-                          <img
-                            src={product.image}
-                            alt={product.nom_produit}
-                            className="h-40 w-full rounded-t-xl object-cover"
-                          />
-                        ) : (
-                          <div className="h-40 w-full rounded-t-xl bg-gradient-to-br from-orange-200 via-amber-100 to-orange-50" />
-                        )}
-                        <div className="menu-card__body">
-                          <h3 className="menu-card__title" style={menuTextStyle}>
-                            {product.nom_produit}
-                          </h3>
-                          {product.description && (
-                            <p className="menu-card__description" style={menuBodyTextStyle}>
-                              {product.description}
-                            </p>
-                          )}
-                          <p className="menu-card__price" style={menuBodyTextStyle}>
-                            {formatCurrencyCOP(product.prix_vente)}
-                          </p>
-                        </div>
-                      </article>
-                    );
-                  })
-                ) : (
-                  <div className="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white/70 p-6 text-center">
-                    <p className="text-sm text-slate-500" style={menuBodyTextStyle}>
-                      Aucun best seller sélectionné pour le moment.
-                    </p>
-                  </div>
-                )}
-              </div>
-              <EditableElement
-                id="menu.ctaLabel"
-                label="Modifier le bouton de commande"
-                onEdit={onEdit}
-                className="section-actions mt-8"
-                buttonClassName="right-2 top-2"
-              >
-                <div className="section-actions">
-                  <button
-                    type="button"
-                    className="ui-btn ui-btn-primary hero-cta"
-                    style={{
-                      ...getElementBodyTextStyle('menu.ctaLabel'),
-                      ...getElementBackgroundStyle('menu.ctaLabel'),
-                    }}
-                    disabled
-                  >
-                    {renderRichTextElement(
-                      'menu.ctaLabel',
-                      'span',
-                      {
-                        className: 'inline-flex items-center justify-center',
-                        style: getElementBodyTextStyle('menu.ctaLabel'),
-                      },
-                      content.menu.ctaLabel,
-                    )}
-                  </button>
+                <nav className="login-nav" aria-label="Navigation principale">
                   <EditableElement
-                    id="menu.loadingLabel"
-                    label="Modifier le texte de chargement"
+                    id="navigation.links.home"
+                    label="Modifier le lien Accueil"
                     onEdit={onEdit}
-                    className="ml-4 inline-flex"
+                    className="inline-flex"
                     buttonClassName="-right-3 -top-3"
                     as="span"
                   >
+                    <a href="#" className="login-nav__link" style={navigationBodyStyle}>
+                      {renderRichTextElement(
+                        'navigation.links.home',
+                        'span',
+                        {
+                          style: getElementBodyTextStyle('navigation.links.home'),
+                        },
+                        content.navigation.links.home,
+                      )}
+                    </a>
+                  </EditableElement>
+                  <EditableElement
+                    id="navigation.links.menu"
+                    label="Modifier le lien Menu"
+                    onEdit={onEdit}
+                    className="inline-flex"
+                    buttonClassName="-right-3 -top-3"
+                    as="span"
+                  >
+                    <a href="#" className="login-nav__link" style={navigationBodyStyle}>
+                      {renderRichTextElement(
+                        'navigation.links.menu',
+                        'span',
+                        {
+                          style: getElementBodyTextStyle('navigation.links.menu'),
+                        },
+                        content.navigation.links.menu,
+                      )}
+                    </a>
+                  </EditableElement>
+                  <EditableElement
+                    id="navigation.links.about"
+                    label="Modifier le lien À propos"
+                    onEdit={onEdit}
+                    className="inline-flex"
+                    buttonClassName="-right-3 -top-3"
+                    as="span"
+                  >
+                    <a href="#" className="login-nav__link" style={navigationBodyStyle}>
+                      {renderRichTextElement(
+                        'navigation.links.about',
+                        'span',
+                        {
+                          style: getElementBodyTextStyle('navigation.links.about'),
+                        },
+                        content.navigation.links.about,
+                      )}
+                    </a>
+                  </EditableElement>
+                  <EditableElement
+                    id="navigation.links.contact"
+                    label="Modifier le lien Contact"
+                    onEdit={onEdit}
+                    className="inline-flex"
+                    buttonClassName="-right-3 -top-3"
+                    as="span"
+                  >
+                    <a href="#" className="login-nav__link" style={navigationBodyStyle}>
+                      {renderRichTextElement(
+                        'navigation.links.contact',
+                        'span',
+                        {
+                          style: getElementBodyTextStyle('navigation.links.contact'),
+                        },
+                        content.navigation.links.contact,
+                      )}
+                    </a>
+                  </EditableElement>
+                </nav>
+                <EditableElement
+                  id="navigation.staffLogo"
+                  label="Modifier le logo du personnel"
+                  onEdit={onEdit}
+                  className="flex-shrink-0"
+                  buttonClassName="-right-2 -top-2"
+                >
+                  <img src={staffTriggerLogo} alt="" className="login-brand__logo" aria-hidden="true" />
+                </EditableElement>
+              </div>
+            </header>
+          </EditableElement>
+        </SectionCard>
+
+        <SectionCard zone="hero" activeZone={activeZone}>
+          <EditableElement
+            id="hero.backgroundImage"
+            label="Modifier le visuel de fond du hero"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <section className="section section-hero" style={{ ...heroBackgroundStyle, ...heroTextStyle }}>
+              <div className="section-hero__inner">
+                <div className="hero-content" style={heroTextStyle}>
+                  <EditableElement
+                    id="hero.title"
+                    label="Modifier le titre du hero"
+                    onEdit={onEdit}
+                    className="block"
+                    buttonClassName="right-0 -top-3"
+                  >
                     {renderRichTextElement(
-                      'menu.loadingLabel',
-                      'p',
+                      'hero.title',
+                      'h1',
                       {
-                        className: 'section-text section-text--muted',
-                        style: getElementBodyTextStyle('menu.loadingLabel'),
+                        className: 'hero-title',
+                        style: getElementTextStyle('hero.title'),
                       },
-                      content.menu.loadingLabel,
+                      content.hero.title,
                     )}
                   </EditableElement>
+                  <EditableElement
+                    id="hero.subtitle"
+                    label="Modifier le sous-titre du hero"
+                    onEdit={onEdit}
+                    className="block"
+                    buttonClassName="right-0 -top-3"
+                  >
+                    {renderRichTextElement(
+                      'hero.subtitle',
+                      'p',
+                      {
+                        className: 'hero-subtitle',
+                        style: getElementBodyTextStyle('hero.subtitle'),
+                      },
+                      content.hero.subtitle,
+                    )}
+                  </EditableElement>
+                  <EditableElement
+                    id="hero.cta"
+                    label="Modifier le bouton d'appel à l'action"
+                    onEdit={onEdit}
+                    className="inline-flex"
+                    buttonClassName="-right-3 -top-3"
+                    as="span"
+                  >
+                    <a href="#" className="hero-cta" style={getElementBackgroundStyle('hero.cta')}>
+                      {renderRichTextElement(
+                        'hero.cta',
+                        'span',
+                        {
+                          style: getElementTextStyle('hero.cta'),
+                        },
+                        content.hero.cta,
+                      )}
+                    </a>
+                  </EditableElement>
                 </div>
-              </EditableElement>
-            </div>
-          </section>
-        </EditableElement>
-      </SectionCard>
+              </div>
+            </section>
+          </EditableElement>
+        </SectionCard>
 
+        <SectionCard zone="about" activeZone={activeZone}>
+          <EditableElement
+            id="about.style.background"
+            label="Modifier le fond de la section À propos"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <section className="section section-surface" style={{ ...aboutBackgroundStyle, ...aboutTextStyle }}>
+              <div className="layout-container">
+                <EditableElement
+                  id="about.title"
+                  label="Modifier le titre À propos"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  {renderRichTextElement(
+                    'about.title',
+                    'h2',
+                    {
+                      className: 'section-title',
+                      style: getElementTextStyle('about.title'),
+                    },
+                    content.about.title,
+                  )}
+                </EditableElement>
+                <EditableElement
+                  id="about.text"
+                  label="Modifier le texte À propos"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  <div className="about-text" style={aboutBodyTextStyle}>
+                    {renderRichTextElement(
+                      'about.text',
+                      'p',
+                      {
+                        className: 'section-text',
+                        style: getElementBodyTextStyle('about.text'),
+                      },
+                      content.about.text,
+                    )}
+                  </div>
+                </EditableElement>
+              </div>
+            </section>
+          </EditableElement>
+        </SectionCard>
 
-      <SectionCard zone="findUs" activeZone={activeZone}>
-        <EditableElement
-          id="findUs.style.background"
-          label="Modifier le fond de la section Encuéntranos"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <section className="section section-surface" style={{ ...findUsBackgroundStyle, ...findUsTextStyle }}>
-            <div className="find-us-grid" style={findUsTextStyle}>
-              <div className="find-us-panel" style={findUsTextStyle}>
+        <SectionCard zone="menu" activeZone={activeZone}>
+          <EditableElement
+            id="menu.style.background"
+            label="Modifier le fond de la section Menu"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <section className="section section-surface" style={{ ...menuBackgroundStyle, ...menuTextStyle }}>
+              <div className="layout-container">
+                <EditableElement
+                  id="menu.title"
+                  label="Modifier le titre du menu"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  {renderRichTextElement(
+                    'menu.title',
+                    'h2',
+                    {
+                      className: 'section-title',
+                      style: getElementTextStyle('menu.title'),
+                    },
+                    content.menu.title,
+                  )}
+                </EditableElement>
+                <EditableElement
+                  id="menu.description"
+                  label="Modifier la description du menu"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  {renderRichTextElement(
+                    'menu.description',
+                    'p',
+                    {
+                      className: 'section-text',
+                      style: getElementBodyTextStyle('menu.description'),
+                    },
+                    content.menu.description,
+                  )}
+                </EditableElement>
+                <EditableElement
+                  id="menu.bestSellers"
+                  label="Modifier la section des meilleurs vendeurs"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  <>
+                    <EditableElement
+                      id="menu.bestSellersLabel"
+                      label="Modifier le libellé des meilleurs vendeurs"
+                      onEdit={onEdit}
+                      className="block"
+                      buttonClassName="right-0 -top-3"
+                    >
+                      {renderRichTextElement(
+                        'menu.bestSellersLabel',
+                        'h3',
+                        {
+                          className: 'section-subtitle',
+                          style: getElementTextStyle('menu.bestSellersLabel'),
+                        },
+                        content.menu.bestSellersLabel,
+                      )}
+                    </EditableElement>
+                    <div className="best-sellers-grid">
+                      {bestSellerProducts.map((product) => (
+                        <div key={product.id} className="product-card">
+                          <img
+                            src={product.image ?? content.assets.defaultProductImage}
+                            alt={product.name}
+                            className="product-card__image"
+                          />
+                          <div className="product-card__content">
+                            <h4 className="product-card__name">{product.name}</h4>
+                            <p className="product-card__description">{product.description}</p>
+                            <p className="product-card__price">{formatCurrencyCOP(product.price)}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                </EditableElement>
+                <EditableElement
+                  id="menu.loadingLabel"
+                  label="Modifier le libellé de chargement"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  {renderRichTextElement(
+                    'menu.loadingLabel',
+                    'p',
+                    {
+                      className: 'section-text section-text--muted',
+                      style: getElementBodyTextStyle('menu.loadingLabel'),
+                    },
+                    content.menu.loadingLabel,
+                  )}
+                </EditableElement>
+              </div>
+            </section>
+          </EditableElement>
+        </SectionCard>
+
+        <SectionCard zone="instagramReviews" activeZone={activeZone}>
+          <EditableElement
+            id="instagramReviews.style.background"
+            label="Modifier le fond de la section Instagram"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <section
+              className="section section-surface"
+              style={{ ...createBackgroundStyle(content.instagramReviews.style), ...createTextStyle(content.instagramReviews.style) }}
+            >
+              <div className="layout-container">
+                <EditableElement
+                  id="instagramReviews.title"
+                  label="Modifier le titre de la section Instagram"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  {renderRichTextElement(
+                    'instagramReviews.title',
+                    'h2',
+                    {
+                      className: 'section-title',
+                      style: getElementTextStyle('instagramReviews.title'),
+                    },
+                    content.instagramReviews.title,
+                  )}
+                </EditableElement>
+                <div className="instagram-grid">
+                  {content.instagramReviews.posts.map((post, index) => (
+                    <EditableElement
+                      key={post.url}
+                      id={`instagramReviews.posts.${index}` as EditableElementKey}
+                      label={`Modifier l'avis Instagram ${index + 1}`}
+                      onEdit={onEdit}
+                      className="block"
+                      buttonClassName="-right-2 -top-2"
+                    >
+                      <a
+                        href={post.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="instagram-post"
+                      >
+                        <img
+                          src={post.thumbnailUrl}
+                          alt={`Avis Instagram de ${post.author}`}
+                          className="instagram-post__image"
+                        />
+                        <div className="instagram-post__overlay">
+                          <div className="instagram-post__author">@{post.author}</div>
+                          <div className="instagram-post__likes">
+                            <Star className="h-4 w-4" />
+                            <span>{post.likes}</span>
+                          </div>
+                        </div>
+                      </a>
+                    </EditableElement>
+                  ))}
+                </div>
+                {isCustomizationMode && content.instagramReviews.posts.length === 0 && (
+                  <EditableElement
+                    id="instagramReviews.posts"
+                    label="Ajouter des avis Instagram"
+                    onEdit={onEdit}
+                    className="block"
+                    buttonClassName="-right-2 -top-2"
+                  >
+                    <div className="h-64 w-full rounded-xl object-cover shadow-lg" />
+                  </EditableElement>
+                )}
+              </div>
+            </section>
+          </EditableElement>
+        </SectionCard>
+
+        <SectionCard zone="findUs" activeZone={activeZone}>
+          <EditableElement
+            id="findUs.style.background"
+            label="Modifier le fond de la section Encuéntranos"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <section className="find-us-section-new" style={findUsBackgroundStyle}>
+              <div className="layout-container">
                 <EditableElement
                   id="findUs.title"
                   label="Modifier le titre Encuéntranos"
@@ -775,232 +747,251 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                     'findUs.title',
                     'h2',
                     {
-                      className: 'section-title',
+                      className: 'find-us-title-new',
                       style: getElementTextStyle('findUs.title'),
                     },
                     content.findUs.title,
                   )}
                 </EditableElement>
-                <div className="find-us-details">
-                  <div className="find-us-detail" style={findUsTextStyle}>
-                    <MapPin className="find-us-detail__icon" aria-hidden="true" />
-                    <div>
-                      <EditableElement
-                        id="findUs.addressLabel"
-                        label="Modifier le libellé de l'adresse"
-                        onEdit={onEdit}
-                        className="block"
-                        buttonClassName="right-0 -top-3"
-                      >
-                        {renderRichTextElement(
-                          'findUs.addressLabel',
-                          'h3',
-                          {
-                            className: 'find-us-detail__title',
-                            style: getElementTextStyle('findUs.addressLabel'),
-                          },
-                          content.findUs.addressLabel,
-                        )}
-                      </EditableElement>
-                      <EditableElement
-                        id="findUs.address"
-                        label="Modifier l'adresse"
-                        onEdit={onEdit}
-                        className="mt-1 block"
-                        buttonClassName="right-0 -top-3"
-                      >
-                        {renderRichTextElement(
-                          'findUs.address',
-                          'p',
-                          {
-                            className: 'find-us-detail__text',
-                            style: getElementBodyTextStyle('findUs.address'),
-                          },
-                          content.findUs.address,
-                        )}
-                      </EditableElement>
+                <div className="find-us-content-new">
+                  <div className="find-us-card-wrapper">
+                    <div className="find-us-card" style={findUsTextStyle}>
+                      {/* Section Direction */}
+                      <div className="find-us-info-item">
+                        <div className="find-us-icon-circle">
+                          <MapPin className="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <div>
+                          <EditableElement
+                            id="findUs.addressLabel"
+                            label="Modifier le libellé de l'adresse"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.addressLabel',
+                              'h3',
+                              {
+                                className: 'find-us-detail-title',
+                                style: getElementTextStyle('findUs.addressLabel'),
+                              },
+                              content.findUs.addressLabel,
+                            )}
+                          </EditableElement>
+                          <EditableElement
+                            id="findUs.address"
+                            label="Modifier l'adresse"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.address',
+                              'p',
+                              {
+                                className: 'find-us-detail-text',
+                                style: getElementBodyTextStyle('findUs.address'),
+                              },
+                              content.findUs.address,
+                            )}
+                          </EditableElement>
+                        </div>
+                      </div>
+
+                      {/* Section Horaires */}
+                      <div className="find-us-info-item">
+                        <div className="find-us-icon-circle">
+                          <Clock className="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <div>
+                          <EditableElement
+                            id="findUs.hoursLabel"
+                            label="Modifier le libellé des horaires"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.hoursLabel',
+                              'h3',
+                              {
+                                className: 'find-us-detail-title',
+                                style: getElementTextStyle('findUs.hoursLabel'),
+                              },
+                              content.findUs.hoursLabel,
+                            )}
+                          </EditableElement>
+                          <EditableElement
+                            id="findUs.hours"
+                            label="Modifier les horaires"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.hours',
+                              'p',
+                              {
+                                className: 'find-us-detail-text',
+                                style: getElementBodyTextStyle('findUs.hours'),
+                              },
+                              content.findUs.hours,
+                            )}
+                          </EditableElement>
+                        </div>
+                      </div>
+
+                      {/* Section Email */}
+                      <div className="find-us-info-item">
+                        <div className="find-us-icon-circle">
+                          <Mail className="h-5 w-5" aria-hidden="true" />
+                        </div>
+                        <div>
+                          <EditableElement
+                            id="findUs.cityLabel"
+                            label="Modifier le libellé de l'email"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.cityLabel',
+                              'h3',
+                              {
+                                className: 'find-us-detail-title',
+                                style: getElementTextStyle('findUs.cityLabel'),
+                              },
+                              content.findUs.cityLabel,
+                            )}
+                          </EditableElement>
+                          <EditableElement
+                            id="findUs.city"
+                            label="Modifier l'email"
+                            onEdit={onEdit}
+                            className="block"
+                            buttonClassName="right-0 -top-3"
+                          >
+                            {renderRichTextElement(
+                              'findUs.city',
+                              'p',
+                              {
+                                className: 'find-us-detail-text',
+                                style: getElementBodyTextStyle('findUs.city'),
+                              },
+                              content.findUs.city,
+                            )}
+                          </EditableElement>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                <div className="find-us-detail" style={findUsTextStyle}>
-                  <Clock className="find-us-detail__icon" aria-hidden="true" />
-                  <div>
-                    <EditableElement
-                      id="findUs.hoursLabel"
-                      label="Modifier le libellé des horaires"
-                      onEdit={onEdit}
-                      className="block"
-                      buttonClassName="right-0 -top-3"
-                    >
-                      {renderRichTextElement(
-                        'findUs.hoursLabel',
-                        'h3',
-                        {
-                          className: 'find-us-detail__title',
-                          style: getElementTextStyle('findUs.hoursLabel'),
-                        },
-                        content.findUs.hoursLabel,
-                      )}
-                    </EditableElement>
-                    <EditableElement
-                      id="findUs.hours"
-                      label="Modifier les horaires"
-                      onEdit={onEdit}
-                      className="mt-1 block"
-                      buttonClassName="right-0 -top-3"
-                    >
-                      {renderRichTextElement(
-                        'findUs.hours',
-                        'p',
-                        {
-                          className: 'find-us-detail__text',
-                          style: getElementBodyTextStyle('findUs.hours'),
-                        },
-                        content.findUs.hours,
-                      )}
-                    </EditableElement>
-                  </div>
-                </div>
-                <div className="find-us-detail" style={findUsTextStyle}>
-                  <Mail className="find-us-detail__icon" aria-hidden="true" />
-                  <div>
-                    <EditableElement
-                      id="findUs.cityLabel"
-                      label="Modifier le libellé de l'email"
-                      onEdit={onEdit}
-                      className="block"
-                      buttonClassName="right-0 -top-3"
-                    >
-                      {renderRichTextElement(
-                        'findUs.cityLabel',
-                        'h3',
-                        {
-                          className: 'find-us-detail__title',
-                          style: getElementTextStyle('findUs.cityLabel'),
-                        },
-                        content.findUs.cityLabel,
-                      )}
-                    </EditableElement>
-                    <EditableElement
-                      id="findUs.city"
-                      label="Modifier l'email"
-                      onEdit={onEdit}
-                      className="mt-1 block"
-                      buttonClassName="right-0 -top-3"
-                    >
-                      {renderRichTextElement(
-                        'findUs.city',
-                        'p',
-                        {
-                          className: 'find-us-detail__text',
-                          style: getElementBodyTextStyle('findUs.city'),
-                        },
-                        content.findUs.city,
-                      )}
-                    </EditableElement>
-                  </div>
-                </div>
-                </div>
-              </div>
-              <div className="find-us-map" style={findUsTextStyle}>
-                {hasMapLocation ? (
-                  <div className="find-us-map__frame">
-                    <iframe
-                      title={`Carte Google Maps pour ${findUsMapTitle}`}
-                      src={findUsMapEmbedUrl}
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                    />
-                    <a
-                      className="find-us-map__link"
-                      href={findUsMapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <EditableElement
-                        id="findUs.mapLabel"
-                        label="Modifier le libellé du lien Google Maps"
-                        onEdit={onEdit}
-                        className="inline-flex"
-                        buttonClassName="-right-3 -top-3"
-                        as="span"
-                      >
-                        {renderRichTextElement(
-                          'findUs.mapLabel',
-                          'span',
-                          {
-                            className: 'find-us-map__label',
-                            style: getElementBodyTextStyle('findUs.mapLabel'),
-                          },
-                          content.findUs.mapLabel,
-                        )}
-                      </EditableElement>
-                    </a>
-                  </div>
-                ) : (
-                  <div className="find-us-map__placeholder">
-                    <EditableElement
-                      id="findUs.mapLabel"
-                      label="Modifier le libellé du lien Google Maps"
-                      onEdit={onEdit}
-                      className="inline-flex"
-                      buttonClassName="-right-3 -top-3"
-                      as="span"
-                    >
-                      {renderRichTextElement(
-                        'findUs.mapLabel',
-                        'span',
-                        {
-                          className: 'find-us-map__label',
-                          style: getElementBodyTextStyle('findUs.mapLabel'),
-                        },
-                        content.findUs.mapLabel,
-                      )}
-                    </EditableElement>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-        </EditableElement>
-      </SectionCard>
 
-      <SectionCard zone="footer" activeZone={activeZone}>
-        <EditableElement
-          id="footer.style.background"
-          label="Modifier le fond du pied de page"
-          onEdit={onEdit}
-          className="block"
-          buttonClassName="right-4 top-4"
-        >
-          <footer className="site-footer" style={{ ...footerBackgroundStyle, ...footerTextStyle }}>
-            <div className="layout-container site-footer__inner" style={footerTextStyle}>
-              <EditableElement
-                id="footer.text"
-                label="Modifier le texte du pied de page"
-                onEdit={onEdit}
-                className="block"
-                buttonClassName="right-0 -top-3"
-              >
-                <p style={getElementBodyTextStyle('footer.text')}>
-                  &copy; {new Date().getFullYear()} {content.navigation.brand}.{' '}
-                  {renderRichTextElement(
-                    'footer.text',
-                    'span',
-                    {
-                      style: getElementBodyTextStyle('footer.text'),
-                    },
-                    content.footer.text,
-                  )}
-                </p>
-              </EditableElement>
-            </div>
-          </footer>
-        </EditableElement>
-      </SectionCard>
+                  {/* Section Carte Google Maps */}
+                  <div className="find-us-card-wrapper">
+                    <div className="find-us-map-container">
+                      {hasMapLocation ? (
+                        <>
+                          <iframe
+                            title={`Carte Google Maps pour ${findUsMapTitle}`}
+                            src={findUsMapEmbedUrl}
+                            loading="lazy"
+                            allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="find-us-map-iframe"
+                          />
+                          <a
+                            className="find-us-map-button"
+                            href={findUsMapUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <EditableElement
+                              id="findUs.mapLabel"
+                              label="Modifier le libellé du lien Google Maps"
+                              onEdit={onEdit}
+                              className="inline-flex"
+                              buttonClassName="-right-3 -top-3"
+                              as="span"
+                            >
+                              {renderRichTextElement(
+                                'findUs.mapLabel',
+                                'span',
+                                {
+                                  style: getElementBodyTextStyle('findUs.mapLabel'),
+                                },
+                                content.findUs.mapLabel,
+                              )}
+                            </EditableElement>
+                          </a>
+                        </>
+                      ) : (
+                        <div className="find-us-map-button">
+                          <EditableElement
+                            id="findUs.mapLabel"
+                            label="Modifier le libellé du lien Google Maps"
+                            onEdit={onEdit}
+                            className="inline-flex"
+                            buttonClassName="-right-3 -top-3"
+                            as="span"
+                          >
+                            {renderRichTextElement(
+                              'findUs.mapLabel',
+                              'span',
+                              {
+                                style: getElementBodyTextStyle('findUs.mapLabel'),
+                              },
+                              content.findUs.mapLabel,
+                            )}
+                          </EditableElement>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </EditableElement>
+        </SectionCard>
+
+        <SectionCard zone="footer" activeZone={activeZone}>
+          <EditableElement
+            id="footer.style.background"
+            label="Modifier le fond du pied de page"
+            onEdit={onEdit}
+            className="block"
+            buttonClassName="right-4 top-4"
+          >
+            <footer className="site-footer" style={{ ...footerBackgroundStyle, ...footerTextStyle }}>
+              <div className="layout-container site-footer__inner" style={footerTextStyle}>
+                <EditableElement
+                  id="footer.text"
+                  label="Modifier le texte du pied de page"
+                  onEdit={onEdit}
+                  className="block"
+                  buttonClassName="right-0 -top-3"
+                >
+                  <p style={getElementBodyTextStyle('footer.text')}>
+                    &copy; {new Date().getFullYear()} {content.navigation.brand}.{' '}
+                    {renderRichTextElement(
+                      'footer.text',
+                      'span',
+                      {
+                        style: getElementBodyTextStyle('footer.text'),
+                      },
+                      content.footer.text,
+                    )}
+                  </p>
+                </EditableElement>
+              </div>
+            </footer>
+          </EditableElement>
+        </SectionCard>
       </div>
     </EditButtonVisibilityContext.Provider>
   );
+};
+
 };
 
 export default SitePreviewCanvas;
