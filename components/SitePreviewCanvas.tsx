@@ -761,9 +761,10 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
           className="block"
           buttonClassName="right-4 top-4"
         >
-          <section className="section section-surface" style={{ ...findUsBackgroundStyle, ...findUsTextStyle }}>
-            <div className="find-us-grid" style={findUsTextStyle}>
-              <div className="find-us-panel" style={findUsTextStyle}>
+          <section className="find-us-section-new" style={{ ...findUsBackgroundStyle, ...findUsTextStyle }}>
+            <div className="find-us-content-new">
+              <div className="find-us-card-wrapper">
+                <div className="find-us-card" style={findUsTextStyle}>
                 <EditableElement
                   id="findUs.title"
                   label="Modifier le titre Encuéntranos"
@@ -775,15 +776,15 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                     'findUs.title',
                     'h2',
                     {
-                      className: 'section-title',
+                      className: 'find-us-title-new',
                       style: getElementTextStyle('findUs.title'),
                     },
                     content.findUs.title,
                   )}
                 </EditableElement>
                 <div className="find-us-details">
-                  <div className="find-us-detail" style={findUsTextStyle}>
-                    <MapPin className="find-us-detail__icon" aria-hidden="true" />
+                  <div className="find-us-info-item" style={findUsTextStyle}>
+                    <div className="find-us-icon-circle"><MapPin size={20} /></div>
                     <div>
                       <EditableElement
                         id="findUs.addressLabel"
@@ -796,7 +797,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                           'findUs.addressLabel',
                           'h3',
                           {
-                            className: 'find-us-detail__title',
+                            className: 'find-us-detail-title',
                             style: getElementTextStyle('findUs.addressLabel'),
                           },
                           content.findUs.addressLabel,
@@ -813,7 +814,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                           'findUs.address',
                           'p',
                           {
-                            className: 'find-us-detail__text',
+                            className: 'find-us-detail-text',
                             style: getElementBodyTextStyle('findUs.address'),
                           },
                           content.findUs.address,
@@ -821,8 +822,8 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                       </EditableElement>
                     </div>
                   </div>
-                <div className="find-us-detail" style={findUsTextStyle}>
-                  <Clock className="find-us-detail__icon" aria-hidden="true" />
+                <div className="find-us-info-item" style={findUsTextStyle}>
+                  <div className="find-us-icon-circle"><Clock size={20} /></div>
                   <div>
                     <EditableElement
                       id="findUs.hoursLabel"
@@ -835,7 +836,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                         'findUs.hoursLabel',
                         'h3',
                         {
-                          className: 'find-us-detail__title',
+                          className: 'find-us-detail-title',
                           style: getElementTextStyle('findUs.hoursLabel'),
                         },
                         content.findUs.hoursLabel,
@@ -852,7 +853,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                         'findUs.hours',
                         'p',
                         {
-                          className: 'find-us-detail__text',
+                          className: 'find-us-detail-text',
                           style: getElementBodyTextStyle('findUs.hours'),
                         },
                         content.findUs.hours,
@@ -860,8 +861,8 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                     </EditableElement>
                   </div>
                 </div>
-                <div className="find-us-detail" style={findUsTextStyle}>
-                  <Mail className="find-us-detail__icon" aria-hidden="true" />
+                <div className="find-us-info-item" style={findUsTextStyle}>
+                  <div className="find-us-icon-circle"><Mail size={20} /></div>
                   <div>
                     <EditableElement
                       id="findUs.cityLabel"
@@ -874,7 +875,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                         'findUs.cityLabel',
                         'h3',
                         {
-                          className: 'find-us-detail__title',
+                          className: 'find-us-detail-title',
                           style: getElementTextStyle('findUs.cityLabel'),
                         },
                         content.findUs.cityLabel,
@@ -891,7 +892,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                         'findUs.city',
                         'p',
                         {
-                          className: 'find-us-detail__text',
+                          className: 'find-us-detail-text',
                           style: getElementBodyTextStyle('findUs.city'),
                         },
                         content.findUs.city,
@@ -901,7 +902,10 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                 </div>
                 </div>
               </div>
-              <div className="find-us-map" style={findUsTextStyle}>
+              </div>
+              </div>
+              <div className="find-us-card-wrapper">
+                <div className="find-us-card find-us-map-container" style={findUsTextStyle}>
                 {hasMapLocation ? (
                   <div className="find-us-map__frame">
                     <iframe
@@ -910,9 +914,10 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                       loading="lazy"
                       allowFullScreen
                       referrerPolicy="no-referrer-when-downgrade"
+                      className="find-us-map-iframe"
                     />
                     <a
-                      className="find-us-map__link"
+                      className="find-us-map-button"
                       href={findUsMapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -960,6 +965,7 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                   </div>
                 )}
               </div>
+            </div>
             </div>
           </section>
         </EditableElement>
