@@ -955,8 +955,13 @@ body {
 
 .find-us-grid {
   display: grid;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: stretch;
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.section.section-surface:has(.find-us-grid) {
+  background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(2rem, 5vw, 4rem);
 }
 
 @media (min-width: 1024px) {
@@ -968,57 +973,74 @@ body {
 .find-us-panel {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.25rem, 3vw, 1.75rem);
-  padding: clamp(1.5rem, 4vw, 2.25rem);
-  border-radius: 1.5rem;
-  background: color-mix(in srgb, var(--color-surface) 96%, transparent);
-  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
-  border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  gap: clamp(1.5rem, 3vw, 2rem);
+  background: transparent;
 }
 
 .find-us-details {
-  display: grid;
-  gap: clamp(1rem, 3vw, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.find-us-panel .section-title {
+  font-size: clamp(2.25rem, 4.5vw, 3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  color: #FFFFFF;
 }
 
 .find-us-detail {
   display: flex;
   align-items: flex-start;
-  gap: 0.85rem;
-  padding: 1rem 1.25rem;
-  border-radius: 1.25rem;
-  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-border) 65%, transparent);
-  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
+  gap: 1rem;
+}
+
+.find-us-detail--centered {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.find-us-detail--centered .find-us-detail__icon {
+  margin-top: 0;
 }
 
 .find-us-detail__icon {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   flex-shrink: 0;
-  color: var(--color-accent);
+  color: #FFFFFF;
+  stroke-width: 2.5;
+  margin-top: 0.125rem;
 }
 
 .find-us-detail__title {
   margin: 0;
-  font-size: var(--font-size-md);
-  font-weight: 600;
-  color: var(--color-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .find-us-detail__text {
-  margin: 0.15rem 0 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  margin: 0.375rem 0 0;
+  font-size: 0.9375rem;
+  color: #FEF3C7;
   white-space: pre-line;
+  line-height: 1.5;
 }
 
 .find-us-map {
   position: relative;
   border-radius: 1.5rem;
   overflow: hidden;
-  min-height: 280px;
-  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+  min-height: 450px;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .find-us-map__frame {

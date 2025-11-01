@@ -815,9 +815,9 @@ const Login: React.FC = () => {
 
             <div className="mx-auto mt-10 grid w-full max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
               <div className="grid gap-6">
-                <article className="h-full rounded-[24px] border border-white/70 bg-white/75 p-4 shadow-[0_24px_48px_-30px_rgba(15,23,42,0.5)] backdrop-blur">
+                <article className="h-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500 text-white">
                       <MapPin className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-2">
@@ -843,9 +843,9 @@ const Login: React.FC = () => {
                   </div>
                 </article>
 
-                <article className="h-full rounded-[24px] border border-white/70 bg-white/75 p-4 shadow-[0_24px_48px_-30px_rgba(15,23,42,0.5)] backdrop-blur">
+                <article className="h-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500 text-white">
                       <Clock className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-2">
@@ -871,9 +871,9 @@ const Login: React.FC = () => {
                   </div>
                 </article>
 
-                <article className="h-full rounded-[24px] border border-white/70 bg-white/75 p-4 shadow-[0_24px_48px_-30px_rgba(15,23,42,0.5)] backdrop-blur">
+                <article className="h-full rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-white">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500 text-white">
                       <Phone className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-3">
@@ -890,9 +890,9 @@ const Login: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <a
                             href={`tel:${whatsappTestNumber}`}
-                            className="inline-flex items-center gap-2 text-base font-semibold text-gray-900 transition hover:text-orange-500"
+                            className="inline-flex items-center gap-2 text-base font-semibold text-gray-900 transition hover:text-blue-600"
                           >
-                            <Phone className="h-5 w-5 text-orange-500" />
+                            <Phone className="h-5 w-5 text-blue-500" />
                             {whatsappTestNumber}
                           </a>
                           <a
@@ -911,7 +911,7 @@ const Login: React.FC = () => {
                 </article>
               </div>
 
-              <div className="flex h-full w-full flex-col justify-between rounded-[36px] border border-white/70 bg-white/75 p-6 shadow-[0_28px_70px_-32px_rgba(15,23,42,0.55)] backdrop-blur">
+              <div className="flex h-full w-full flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                 <div className="relative aspect-[13/8] w-full overflow-hidden rounded-3xl bg-white">
                   {hasMapLocation ? (
                     <iframe
@@ -936,7 +936,7 @@ const Login: React.FC = () => {
                       href={findUsMapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-orange-500 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+                      className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-blue-500 px-6 py-3 text-base font-semibold text-white shadow-lg transition hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                       style={getElementBodyTextStyle('findUs.mapLabel')}
                     >
                       <MapPin className="h-6 w-6 text-white" />
