@@ -494,12 +494,12 @@ const DEFAULT_INSTAGRAM_REVIEWS_STYLE: SectionStyle = {
 export const DEFAULT_FIND_US_STYLE: SectionStyle = {
   background: {
     type: 'color',
-    color: '#f8fafc',
+    color: 'linear-gradient(135deg, #F59E0B 0%, #F97316 100%)',
     image: null,
   },
   fontFamily: 'Inter',
   fontSize: '16px',
-  textColor: '#0f172a',
+  textColor: '#FFFFFF',
 };
 
 const DEFAULT_FOOTER_STYLE: SectionStyle = {
@@ -613,10 +613,10 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     title: 'Encuéntranos',
     addressLabel: 'Dirección',
     address: 'Cra. 53 #75-98\nBarranquilla, Atlántico\nColombie',
-    cityLabel: 'Email',
+    cityLabel: 'Contacto',
     city: 'hola@ouiouipos.co',
     hoursLabel: 'Horarios',
-    hours: 'Lunes a domingo · 11h00 - 23h00',
+    hours: 'Martes a Domingo · 11h30 - 23h00',
     mapLabel: 'Ver en Google Maps',
     mapUrl:
       'https://www.google.com/maps?q=OUIOUITACOS%2C%20Cra%2053%20%2375-98%2C%20Barranquilla%2C%20Atl%C3%A1ntico%2C%20Colombie',

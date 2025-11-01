@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, Edit2, Mail, MapPin, Star } from 'lucide-react';
+import { Clock, Edit2, Mail, MapPin, MessageCircle, Star } from 'lucide-react';
 import {
   EditableElementKey,
   EditableZoneKey,
@@ -860,8 +860,8 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                     </EditableElement>
                   </div>
                 </div>
-                <div className="find-us-detail" style={findUsTextStyle}>
-                  <Mail className="find-us-detail__icon" aria-hidden="true" />
+                <div className="find-us-detail find-us-detail--centered" style={findUsTextStyle}>
+                  <MessageCircle className="find-us-detail__icon" aria-hidden="true" />
                   <div>
                     <EditableElement
                       id="findUs.cityLabel"
