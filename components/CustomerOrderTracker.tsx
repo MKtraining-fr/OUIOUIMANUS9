@@ -271,7 +271,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden min-h-[3rem]" /* min-h-[3rem] au lieu de h-11 pour plus de flexibilité */
+                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden py-3"
                     style={{
                         backgroundColor: bgColor,
                     }}
@@ -612,7 +612,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
+                                            <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-3 sm:px-5 sm:py-4">
                                                 <div className="flex flex-col gap-4 items-center w-full">
                                                     <div className="flex flex-wrap items-center justify-between gap-4 w-full">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4 h-full">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
