@@ -532,74 +532,71 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             </div>
                         </div>
 
-                        <div className="rounded-2xl bg-black/25 p-4 sm:p-5">
-                            <div className="flex items-start justify-between">
-                                <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Informations</p>
-                                {order.receipt_url && (
-                                    <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                                        Comprobante de pago
-                                    </span>
-                                )}
-                            </div>
-                            <div className="mt-3 flex flex-col gap-4 text-sm sm:flex-row sm:items-start sm:justify-between">
-                                <div className="space-y-2">
-                                    {hasClientDetails ? (
-                                        <>
+                        {(hasClientDetails || order.receipt_url) && (
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                {hasClientDetails && (
+                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-sm border border-white/10">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-white/50 mb-3">Informations client</p>
+                                        <div className="space-y-2.5">
                                             {clientName && (
-                                                <div className="flex items-center gap-2 text-white/80">
-                                                    <User size={16} />
-                                                    <span className="truncate" title={clientName}>{clientName}</span>
+                                                <div className="flex items-center gap-3 text-white/90">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                                                        <User size={16} />
+                                                    </div>
+                                                    <span className="truncate text-sm font-medium" title={clientName}>{clientName}</span>
                                                 </div>
                                             )}
                                             {clientPhone && (
-                                                <div className="flex items-center gap-2 text-white/80">
-                                                    <Phone size={16} />
-                                                    <span className="truncate" title={clientPhone}>{clientPhone}</span>
+                                                <div className="flex items-center gap-3 text-white/90">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                                                        <Phone size={16} />
+                                                    </div>
+                                                    <span className="truncate text-sm font-medium" title={clientPhone}>{clientPhone}</span>
                                                 </div>
                                             )}
                                             {clientAddress && (
-                                                <div className="flex items-center gap-2 text-white/80">
-                                                    <MapPin size={16} />
-                                                    <span className="truncate" title={clientAddress}>{clientAddress}</span>
+                                                <div className="flex items-center gap-3 text-white/90">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                                                        <MapPin size={16} />
+                                                    </div>
+                                                    <span className="truncate text-sm font-medium" title={clientAddress}>{clientAddress}</span>
                                                 </div>
                                             )}
-                                        </>
-                                    ) : (
-                                        <p className="text-white/70">Aucune information client requise.</p>
-                                    )}
-                                </div>
-                                <div className="flex flex-col items-start gap-3 text-sm sm:min-w-[12rem] sm:items-end sm:text-right">
-                                    {order.receipt_url && (
-                                        <div className="flex flex-col items-start gap-2 sm:items-end">
-                                            <button
-                                                type="button"
-                                                onClick={() => setReceiptModalOpen(true)}
-                                                className="group relative inline-flex focus:outline-none"
-                                                aria-label="Ouvrir le justificatif de paiement"
-                                            >
-                                                <div className="relative overflow-hidden rounded-xl border border-white/20 bg-black/40 shadow-lg">
-                                                    <img
-                                                        src={order.receipt_url}
-                                                        alt="Aperçu du justificatif"
-                                                        className="h-20 w-28 object-cover transition duration-500 ease-out group-hover:scale-105 sm:h-24 sm:w-32"
-                                                    />
-                                                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition duration-300 group-hover:opacity-100">
-                                                        <Receipt size={20} className="text-white" />
-                                                    </div>
-                                                </div>
-                                            </button>
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
+                                {order.receipt_url && (
+                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-sm border border-white/10">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-white/50 mb-3">Justificatif de paiement</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setReceiptModalOpen(true)}
+                                            className="group relative w-full overflow-hidden rounded-xl border border-white/20 bg-black/30 shadow-lg transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50"
+                                            aria-label="Ouvrir le justificatif de paiement"
+                                        >
+                                            <img
+                                                src={order.receipt_url}
+                                                alt="Aperçu du justificatif"
+                                                className="h-32 w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                                            />
+                                            <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition duration-300 group-hover:opacity-100">
+                                                <div className="flex flex-col items-center gap-2 text-white">
+                                                    <Receipt size={24} />
+                                                    <span className="text-xs font-semibold">Voir le justificatif</span>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        )}
 
-                        <div className="rounded-2xl bg-black/20 p-4 sm:p-5">
-                            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-xs font-semibold uppercase tracking-wide text-white/60">
-                                <span>Résumé</span>
-                                <span>Articles : {itemsCount}</span>
+                        <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-5 backdrop-blur-sm border border-white/10">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Votre commande</h3>
+                                <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold text-white">{itemsCount} {itemsCount > 1 ? 'articles' : 'article'}</span>
                             </div>
-                            <div className="mt-4 space-y-3 pr-1 text-sm">
+                            <div className="space-y-2.5">
                                 {order.items && order.items.length > 0 ? (
                                     order.items.map(item => {
                                         const isDomicilio = item.nom_produit === 'Domicilio';
@@ -612,31 +609,30 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-3 sm:px-5 sm:py-4">
-                                                <div className="flex flex-col gap-4 items-center w-full">
-                                                    <div className="flex flex-wrap items-center justify-between gap-4 w-full">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4 h-full">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
-                                                                {item.quantite}
-                                                            </span>
-                                                            <div className="min-w-0 flex-1 flex flex-col justify-center h-full">
-                                                                <p className="text-base font-semibold text-black sm:text-lg">
-                                                                    {item.nom_produit}
-                                                                </p>
-                                                                {itemDescription && (
-                                                                    <p className="text-xs text-gray-600">{itemDescription}</p>
-                                                                )}
-
-                                                                {item.commentaire && (
-                                                                    <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
-                                                            </div>
+                                            <div key={item.id} className="group rounded-xl bg-white/95 backdrop-blur-sm p-4 transition-all hover:bg-white hover:shadow-lg">
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-700 to-slate-900 text-base font-bold text-white shadow-md">
+                                                            {item.quantite}
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm shrink-0 h-full">
-                                                            {isFreeShipping ? (
-                                                                <span className="text-emerald-600">GRATUIT</span>
-                                                            ) : (
-                                                                formatCurrencyCOP(item.prix_unitaire * item.quantite)
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="text-base font-bold text-slate-900 leading-tight">
+                                                                {item.nom_produit}
+                                                            </p>
+                                                            {itemDescription && (
+                                                                <p className="text-xs text-slate-600 mt-0.5 leading-snug">{itemDescription}</p>
+                                                            )}
+                                                            {item.commentaire && (
+                                                                <p className="text-xs italic text-amber-600 mt-1 leading-snug">“{item.commentaire}”</p>
                                                             )}
                                                         </div>
+                                                    </div>
+                                                    <div className="shrink-0">
+                                                        {isFreeShipping ? (
+                                                            <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-700">GRATUIT</span>
+                                                        ) : (
+                                                            <span className="text-base font-extrabold text-slate-900">{formatCurrencyCOP(item.prix_unitaire * item.quantite)}</span>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -647,44 +643,51 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 )}
                             </div>
 
-                            {promotionBanners ? (
-                                <div className="mt-6 space-y-3">
-                                    <p className="text-xs font-semibold uppercase tracking-wide text-white/60">Promotions appliquées</p>
-                                    <div className="space-y-3">{promotionBanners}</div>
-                                </div>
-                            ) : null}
-
-                            {totalDiscount > 0 && (
-                                <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 text-sm font-semibold text-emerald-300 border border-emerald-500/20 shadow-lg min-h-[3rem]">
-                                    <span>Réductions totales</span>
-                                    <span>- {formatCurrencyCOP(totalDiscount)}</span>
+                            {promotionBanners && (
+                                <div className="mt-5 space-y-2.5">
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-white/70">Promotions actives</h4>
+                                    <div className="space-y-2">{promotionBanners}</div>
                                 </div>
                             )}
 
-                            <div className="mt-4 flex items-center justify-between border-t border-white/20 pt-4 text-xl font-extrabold text-white min-h-[3rem]">
-                                <span>Total de la commande</span>
-                                <span>{formatCurrencyCOP(order.total)}</span>
+                            <div className="mt-5 space-y-3 border-t border-white/20 pt-4">
+                                {totalDiscount > 0 && (
+                                    <div className="flex items-center justify-between rounded-lg bg-emerald-500/10 px-4 py-3 border border-emerald-500/20">
+                                        <span className="text-sm font-semibold text-emerald-300">Réductions totales</span>
+                                        <span className="text-base font-bold text-emerald-300">- {formatCurrencyCOP(totalDiscount)}</span>
+                                    </div>
+                                )}
+                                <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 px-5 py-4 border border-amber-500/30 shadow-lg">
+                                    <span className="text-base font-bold text-white sm:text-lg">Total à payer</span>
+                                    <span className="text-2xl font-extrabold text-white sm:text-3xl">{formatCurrencyCOP(order.total)}</span>
+                                </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             {isOrderCompleted ? (
-                                <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-2 text-sm font-semibold text-emerald-200">
-                                    <CheckCircle size={16} /> Commande prête
-                                </span>
+                                <div className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-emerald-500/25 to-emerald-600/25 px-4 py-2.5 border border-emerald-500/30">
+                                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/30">
+                                        <CheckCircle size={14} className="text-emerald-300" />
+                                    </div>
+                                    <span className="text-sm font-bold text-emerald-200">Commande prête !</span>
+                                </div>
                             ) : (
-                                <span className="text-xs font-medium uppercase tracking-wide text-white/60">Nous préparons votre commande</span>
+                                <div className="inline-flex items-center gap-2.5 rounded-xl bg-white/5 px-4 py-2.5 border border-white/10">
+                                    <div className="h-2 w-2 animate-pulse rounded-full bg-amber-400"></div>
+                                    <span className="text-xs font-semibold uppercase tracking-wider text-white/70">En préparation</span>
+                                </div>
                             )}
                             <button
                                 onClick={isOrderCompleted ? onNewOrderClick : undefined}
                                 disabled={!isOrderCompleted}
-                                className={`inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition ${
+                                className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
                                     isOrderCompleted
-                                        ? 'bg-white text-amber-600 shadow-lg hover:bg-white/90'
-                                        : 'cursor-not-allowed bg-white/10 text-white/50'
+                                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02]'
+                                        : 'cursor-not-allowed bg-white/5 text-white/30 border border-white/10'
                                 }`}
                             >
-                                Revenir au menu
+                                {isOrderCompleted ? 'Nouvelle commande' : 'Patientez...'}
                             </button>
                         </div>
                     </div>
