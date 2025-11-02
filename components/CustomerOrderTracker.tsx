@@ -108,6 +108,61 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
     const currentStep = useMemo(() => getCurrentStepIndex(order), [order, getCurrentStepIndex]);
 
+    // Fonction pour calculer le temps estimé par étape
+    const getEstimatedTime = useCallback((stepIndex: number): string => {
+        if (!order) return '';
+        
+        const itemCount = order.items?.length ?? 0;
+        const baseTime = 15; // Temps de base en minutes
+        const timePerItem = 3; // Minutes supplémentaires par article
+        
+        switch (stepIndex) {
+            case 0: // Enviado
+                return '2-5 min';
+            case 1: // Validado
+                return '1-3 min';
+            case 2: // En preparacion
+                const prepTime = baseTime + (itemCount * timePerItem);
+                return `${prepTime}-${prepTime + 5} min`;
+            case 3: // Listo
+                return 'Prêt !';
+            default:
+                return '';
+        }
+    }, [order]);
+
+    // Fonction pour obtenir l'horodatage d'une étape
+    const getStepTimestamp = useCallback((stepIndex: number): string => {
+        if (!order) return '';
+        
+        const formatTime = (timestamp: number | null | undefined): string => {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        };
+        
+        switch (stepIndex) {
+            case 0: // Enviado
+                return formatTime(order.created_at);
+            case 1: // Validado
+                return formatTime(order.date_validado);
+            case 2: // En preparacion
+                return formatTime(order.date_en_preparacion);
+            case 3: // Listo
+                return formatTime(order.date_servido);
+            default:
+                return '';
+        }
+    }, [order]);
+
+    // Simulation de la position dans la file d'attente (à remplacer par vraie logique)
+    const queuePosition = useMemo(() => {
+        if (!order || currentStep >= 3) return null;
+        // Simulation basée sur l'ID de commande (à remplacer par vraie API)
+        const simulatedPosition = Math.max(1, Math.floor(Math.random() * 5));
+        return simulatedPosition;
+    }, [order, currentStep]);
+
     const heroProgressRef = useRef<HTMLDivElement | null>(null);
 
     const stepCount = Math.max(steps.length - 1, 1);
@@ -379,6 +434,20 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                             >
                                                 {step.description}
                                             </p>
+                                            {isActive && getEstimatedTime(index) && (
+                                                <div className="mt-1 rounded-full bg-white/20 px-2.5 py-1 backdrop-blur-sm">
+                                                    <p className="text-[10px] sm:text-xs font-bold text-white">
+                                                        ⏱️ {getEstimatedTime(index)}
+                                                    </p>
+                                                </div>
+                                            )}
+                                            {isCompletedStep && getStepTimestamp(index) && (
+                                                <div className="mt-1">
+                                                    <p className="text-[10px] sm:text-xs font-medium text-white/70">
+                                                        ✓ {getStepTimestamp(index)}
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 );
@@ -532,6 +601,87 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             </div>
                         </div>
 
+                        {/* Notification visuelle de changement d'étape */}
+                        {currentStep >= 0 && currentStep < 3 && (
+                            <div className="rounded-xl bg-gradient-to-r from-blue-500/15 to-purple-500/15 p-4 border border-blue-500/20 backdrop-blur-sm animate-pulse-slow">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/30">
+                                        <svg className="h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-bold text-white">
+                                            {currentStep === 0 && "Votre commande a été transmise avec succès !"}
+                                            {currentStep === 1 && "Commande validée ! Préparation en cours..."}
+                                            {currentStep === 2 && "Nos chefs préparent votre commande avec soin"}
+                                        </p>
+                                        <p className="text-xs text-white/70 mt-0.5">
+                                            {currentStep === 0 && "Nous vérifions votre commande"}
+                                            {currentStep === 1 && "Transmission à la cuisine"}
+                                            {currentStep === 2 && "Votre commande sera bientôt prête"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Visualisation de la file d'attente */}
+                        {queuePosition !== null && (
+                            <div className="rounded-xl bg-gradient-to-r from-amber-500/15 to-orange-500/15 p-4 border border-amber-500/20 backdrop-blur-sm">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500/30">
+                                            <span className="text-lg font-bold text-amber-200">#{queuePosition}</span>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-white">
+                                                {queuePosition === 1 ? "Vous êtes le prochain !" : `${queuePosition} commandes avant vous`}
+                                            </p>
+                                            <p className="text-xs text-white/70 mt-0.5">
+                                                {queuePosition === 1 ? "Votre commande est en cours de préparation" : "Merci de votre patience"}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="hidden sm:flex items-center gap-1">
+                                        {[...Array(Math.min(queuePosition, 5))].map((_, i) => (
+                                            <div key={i} className="h-2 w-2 rounded-full bg-amber-400/50"></div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Confettis pour commande prête */}
+                        {isOrderCompleted && (
+                            <div className="confetti-container pointer-events-none absolute inset-0 overflow-hidden">
+                                <style>{`
+                                    @keyframes confetti-fall {
+                                        0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+                                        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                                    }
+                                    .confetti {
+                                        position: absolute;
+                                        width: 10px;
+                                        height: 10px;
+                                        animation: confetti-fall 3s linear infinite;
+                                    }
+                                `}</style>
+                                {[...Array(20)].map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="confetti"
+                                        style={{
+                                            left: `${Math.random() * 100}%`,
+                                            backgroundColor: ['#fbbf24', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'][Math.floor(Math.random() * 5)],
+                                            animationDelay: `${Math.random() * 3}s`,
+                                            animationDuration: `${2 + Math.random() * 2}s`
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
                         {(hasClientDetails || order.receipt_url) && (
                             <div className="grid gap-3 sm:grid-cols-2">
                                 {hasClientDetails && (
@@ -547,12 +697,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                 </div>
                                             )}
                                             {clientPhone && (
-                                                <div className="flex items-center gap-3 text-white/90">
-                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
+                                                <a href={`tel:${clientPhone}`} className="flex items-center gap-3 text-white/90 hover:text-white transition-colors group">
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 group-hover:bg-emerald-500/30 transition-colors">
                                                         <Phone size={16} />
                                                     </div>
-                                                    <span className="truncate text-sm font-medium" title={clientPhone}>{clientPhone}</span>
-                                                </div>
+                                                    <span className="truncate text-sm font-medium underline decoration-dotted" title={clientPhone}>{clientPhone}</span>
+                                                </a>
                                             )}
                                             {clientAddress && (
                                                 <div className="flex items-center gap-3 text-white/90">
@@ -562,6 +712,19 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                     <span className="truncate text-sm font-medium" title={clientAddress}>{clientAddress}</span>
                                                 </div>
                                             )}
+                                        </div>
+                                        {/* Numéro du restaurant cliquable */}
+                                        <div className="mt-4 pt-3 border-t border-white/10">
+                                            <p className="text-xs font-bold uppercase tracking-wider text-white/50 mb-2">Besoin d'aide ?</p>
+                                            <a href="tel:+573001234567" className="flex items-center gap-3 text-white/90 hover:text-emerald-300 transition-colors group">
+                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20 group-hover:bg-emerald-500/40 transition-colors">
+                                                    <Phone size={16} className="text-emerald-300" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-white/60">Appelez le restaurant</p>
+                                                    <p className="text-sm font-bold">+57 300 123 4567</p>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
                                 )}
@@ -663,6 +826,39 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                 </div>
                             </div>
                         </div>
+
+                        {/* Message contextuel selon le type de commande */}
+                        {isOrderCompleted && (
+                            <div className="rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 p-4 border border-emerald-500/30 backdrop-blur-sm">
+                                <div className="flex items-start gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/30">
+                                        {order.type_commande === 'livraison' ? (
+                                            <TruckIcon size={20} className="text-emerald-300" />
+                                        ) : (
+                                            <PackageCheck size={20} className="text-emerald-300" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-bold text-white">
+                                            {order.type_commande === 'livraison' 
+                                                ? "🚀 Votre commande est prête pour la livraison !" 
+                                                : "✅ Vous pouvez venir récupérer votre commande !"}
+                                        </p>
+                                        <p className="text-xs text-white/70 mt-1">
+                                            {order.type_commande === 'livraison' 
+                                                ? "Le livreur partira très bientôt vers votre adresse" 
+                                                : "Présentez-vous au comptoir avec votre numéro de commande"}
+                                        </p>
+                                        {clientAddress && order.type_commande === 'livraison' && (
+                                            <div className="mt-2 flex items-center gap-2 text-xs text-emerald-200">
+                                                <MapPin size={14} />
+                                                <span className="truncate">{clientAddress}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             {isOrderCompleted ? (
