@@ -283,7 +283,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                     >
                         {getPromotionIcon(promotion)}
                     </div>
-                    <div className="flex-1 px-2.5 flex items-center justify-between min-w-0 gap-2">
+                    <div className="flex-1 px-2.5 flex items-center justify-between min-w-0 gap-2 h-full">
                         <p className="font-bold text-white text-sm sm:text-base truncate">{promotion.name}</p>
                         <span className="text-sm sm:text-base font-bold text-white whitespace-nowrap shrink-0">
                             -{formatCurrencyCOP(discountAmount)}
@@ -615,10 +615,10 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                             <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
                                                 <div className="flex flex-col gap-4 items-center w-full">
                                                     <div className="flex flex-wrap items-center justify-between gap-4 w-full">
-                                                        <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
+                                                        <div className="flex min-w-0 flex-1 items-center gap-4 h-full">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
                                                             </span>
-                                                            <div className="min-w-0 flex-1 flex flex-col justify-center">
+                                                            <div className="min-w-0 flex-1 flex flex-col justify-center h-full">
                                                                 <p className="text-base font-semibold text-black sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
@@ -630,7 +630,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm shrink-0">
+                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm shrink-0 h-full">
                                                             {isFreeShipping ? (
                                                                 <span className="text-emerald-600">GRATUIT</span>
                                                             ) : (
@@ -655,13 +655,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             ) : null}
 
                             {totalDiscount > 0 && (
-                                <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 text-sm font-semibold text-emerald-300 border border-emerald-500/20 shadow-lg">
+                                <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-3 py-2 text-sm font-semibold text-emerald-300 border border-emerald-500/20 shadow-lg min-h-[3rem]">
                                     <span>Réductions totales</span>
                                     <span>- {formatCurrencyCOP(totalDiscount)}</span>
                                 </div>
                             )}
 
-                            <div className="mt-4 flex items-center justify-between border-t border-white/20 pt-4 text-xl font-extrabold text-white">
+                            <div className="mt-4 flex items-center justify-between border-t border-white/20 pt-4 text-xl font-extrabold text-white min-h-[3rem]">
                                 <span>Total de la commande</span>
                                 <span>{formatCurrencyCOP(order.total)}</span>
                             </div>
