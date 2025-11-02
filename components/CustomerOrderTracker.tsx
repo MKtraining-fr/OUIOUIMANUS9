@@ -44,6 +44,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
     const [order, setOrder] = useState<Order | null>(null);
     const [loading, setLoading] = useState(true);
     const [isReceiptModalOpen, setReceiptModalOpen] = useState(false);
+    const [productDescriptions, setProductDescriptions] = useState<Record<string, string>>({});
 
     const steps = [
         { name: 'Enviado', icon: FileText, description: 'Votre commande a été transmise avec succès', subtext: 'Nous vérifions votre commande' },
@@ -186,6 +187,38 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
         const interval = setInterval(calculateQueuePosition, 30000);
         return () => clearInterval(interval);
     }, [order, currentStep]);
+
+    // Récupérer les descriptions des produits depuis la table products
+    useEffect(() => {
+        const fetchProductDescriptions = async () => {
+            if (!order || !order.items || order.items.length === 0) {
+                return;
+            }
+            
+            try {
+                const productIds = order.items
+                    .map(item => item.produitRef)
+                    .filter(Boolean);
+                
+                if (productIds.length === 0) return;
+                
+                const products = await api.getProducts();
+                const descriptionsMap: Record<string, string> = {};
+                
+                products.forEach((product: any) => {
+                    if (productIds.includes(product.id) && product.description) {
+                        descriptionsMap[product.id] = product.description;
+                    }
+                });
+                
+                setProductDescriptions(descriptionsMap);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des descriptions des produits:', error);
+            }
+        };
+        
+        fetchProductDescriptions();
+    }, [order]);
 
     const heroProgressRef = useRef<HTMLDivElement | null>(null);
 
@@ -413,7 +446,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             <h2 className="text-3xl font-bold text-center text-white sm:text-4xl">
                                 Commande #{order.id.slice(-6)}
                             </h2>
-                            {isOrderCompleted && (
+                            {isOrderCompleted ? (
                                 <div className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 px-5 py-2.5 border border-emerald-500/30 backdrop-blur-sm">
                                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/30">
                                         {order.type_commande === 'livraison' ? (
@@ -432,6 +465,22 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                             {order.type_commande === 'livraison' 
                                                 ? "Le livreur partira très bientôt" 
                                                 : "Présentez-vous au comptoir avec votre numéro de commande"}
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : queuePosition !== null && (
+                                <div className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 px-5 py-2.5 border border-amber-500/30 backdrop-blur-sm">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/30 font-bold text-amber-200">
+                                        #{queuePosition}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-white">
+                                            {queuePosition === 1 
+                                                ? "🎯 Vous êtes le prochain !" 
+                                                : `📋 ${queuePosition - 1} commande${queuePosition - 1 > 1 ? 's' : ''} avant vous`}
+                                        </p>
+                                        <p className="text-xs text-white/70 mt-0.5">
+                                            Votre commande est en cours de préparation
                                         </p>
                                     </div>
                                 </div>
@@ -742,7 +791,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                 </div>
                                                 <div>
                                                     <p className="text-xs text-white/60">Appelez le restaurant</p>
-                                                    <p className="text-sm font-bold">+57 323 809 0562</p>
+                                                    <p className="text-sm font-bold text-white">+57 323 809 0562</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -784,12 +833,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                     order.items.map(item => {
                                         const isDomicilio = item.nom_produit === 'Domicilio';
                                         const isFreeShipping = isDomicilio && item.prix_unitaire === 0;
-                                        const itemDescription = (() => {
-                                            const potentialDescription = (item as { description?: string | null }).description;
-                                            return typeof potentialDescription === 'string' && potentialDescription.trim().length > 0
-                                                ? potentialDescription.trim()
-                                                : null;
-                                        })();
+                                        const itemDescription = productDescriptions[item.produitRef] || null;
 
                                         return (
                                             <div key={item.id} className="rounded-2xl bg-white p-5 border border-slate-200 shadow-sm">
@@ -849,8 +893,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                         <div className="flex justify-center">
                             <button
-                                onClick={onNewOrderClick}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-base font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02]"
+                                onClick={isOrderCompleted ? onNewOrderClick : undefined}
+                                disabled={!isOrderCompleted}
+                                className={`inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-base font-bold transition-all ${
+                                    isOrderCompleted
+                                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02] cursor-pointer'
+                                        : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-60'
+                                }`}
                             >
                                 Nouvelle commande
                             </button>
