@@ -5,7 +5,7 @@
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .find-us-title-new {
@@ -36,7 +36,7 @@
 }
 
 .find-us-card {
-  background-color: #f5f5dc; /* Beige clair */
+  background-color: #ffffff; /* Blanc */
   padding: 30px;
   border-radius: 15px;
   flex: 1;
@@ -57,7 +57,7 @@
   height: 40px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   font-size: 1.2rem;
   margin-right: 15px;
   flex-shrink: 0;
