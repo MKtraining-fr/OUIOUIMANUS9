@@ -271,7 +271,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
             return (
                 <div
                     key={`${promotion.promotion_id}-${promotion.name}`}
-                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden h-11"
+                    className="flex items-center rounded-xl shadow-lg transition-transform hover:scale-[1.01] overflow-hidden min-h-[3rem]" /* min-h-[3rem] au lieu de h-11 pour plus de flexibilité */
                     style={{
                         backgroundColor: bgColor,
                     }}
@@ -613,12 +613,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                                         return (
                                             <div key={item.id} className="rounded-xl border border-gray-200 bg-white px-4 py-1 sm:px-5 sm:py-2">
-                                                <div className="flex flex-col gap-4 items-center">
-                                                    <div className="flex flex-wrap items-center justify-between gap-4">
+                                                <div className="flex flex-col gap-4 items-center w-full">
+                                                    <div className="flex flex-wrap items-center justify-between gap-4 w-full">
                                                         <div className="flex min-w-0 flex-1 items-center gap-4">                                                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-200 text-base font-semibold text-black shadow-inner shadow-gray-400 sm:h-10 sm:w-10 sm:text-lg">
                                                                 {item.quantite}
                                                             </span>
-                                                            <div className="min-w-0 flex-1">
+                                                            <div className="min-w-0 flex-1 flex flex-col justify-center">
                                                                 <p className="text-base font-semibold text-black sm:text-lg">
                                                                     {item.nom_produit}
                                                                 </p>
@@ -630,7 +630,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                                     <p className="text-xs italic text-amber-200/80">“{item.commentaire}”</p>                                                                )}
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm">
+                                                        <div className="flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-bold text-gray-800 shadow-sm shrink-0">
                                                             {isFreeShipping ? (
                                                                 <span className="text-emerald-600">GRATUIT</span>
                                                             ) : (
