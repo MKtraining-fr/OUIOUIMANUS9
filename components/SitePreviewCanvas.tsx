@@ -897,9 +897,8 @@ const SitePreviewCanvas: React.FC<SitePreviewCanvasProps> = ({
                         },
                         content.findUs.city,
                       )}
-                    </EditableElement>
+                    </div>
                   </div>
-                </div>
                 </div>
               </div>
               </div>
