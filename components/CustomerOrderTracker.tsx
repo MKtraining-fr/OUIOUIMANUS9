@@ -413,12 +413,27 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             <h2 className="text-3xl font-bold text-center text-white sm:text-4xl">
                                 Commande #{order.id.slice(-6)}
                             </h2>
-                            {queuePosition !== null && (
-                                <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/20 px-4 py-1.5 border border-amber-500/30">
-                                    <span className="text-lg font-bold text-amber-200">#{queuePosition}</span>
-                                    <span className="text-sm text-white/80">
-                                        {queuePosition === 1 ? "Vous êtes le prochain !" : `${queuePosition} commandes avant vous`}
-                                    </span>
+                            {isOrderCompleted && (
+                                <div className="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 px-5 py-2.5 border border-emerald-500/30 backdrop-blur-sm">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/30">
+                                        {order.type_commande === 'livraison' ? (
+                                            <TruckIcon size={18} className="text-emerald-300" />
+                                        ) : (
+                                            <PackageCheck size={18} className="text-emerald-300" />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-white">
+                                            {order.type_commande === 'livraison' 
+                                                ? "🚀 Votre commande est prête pour la livraison !" 
+                                                : "✅ Vous pouvez venir récupérer votre commande !"}
+                                        </p>
+                                        <p className="text-xs text-white/70 mt-0.5">
+                                            {order.type_commande === 'livraison' 
+                                                ? "Le livreur partira très bientôt" 
+                                                : "Présentez-vous au comptoir avec votre numéro de commande"}
+                                        </p>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -446,18 +461,20 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         aria-current={isActive ? 'step' : undefined}
                                     >
                                         <div className="flex flex-col items-center text-center gap-2 sm:gap-3">
-                                            <p
-                                                className={`text-xs sm:text-sm font-semibold tracking-wide ${
-                                                    isCompletedStep || isActive ? 'text-white' : 'text-white/70'
-                                                }`}
-                                            >
-                                                {step.name}
-                                            </p>
+                                            <div className="flex items-center gap-1.5">
+                                                <p
+                                                    className={`text-xs sm:text-sm font-semibold tracking-wide ${
+                                                        isCompletedStep || isActive ? 'text-white' : 'text-white/70'
+                                                    }`}
+                                                >
+                                                    {step.name}
+                                                </p>
+                                                {isCompletedStep && (
+                                                    <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-white drop-shadow" />
+                                                )}
+                                            </div>
                                             <div className={iconWrapperClasses}>
                                                 <step.icon className="tracker-step-icon h-10 w-10 sm:h-12 sm:w-12" />
-                                                {isCompletedStep && (
-                                                    <CheckCircle className="absolute -top-2 -right-2 h-5 w-5 sm:h-6 sm:w-6 text-white drop-shadow" />
-                                                )}
                                             </div>
                                             {isActive ? (
                                                 <>
@@ -643,40 +660,52 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             </div>
                         </div>
 
-                        {/* Confettis pour commande prête */}
+                        {/* Tampon PEDIDO LISTO pour commande prête */}
                         {isOrderCompleted && (
-                            <div className="confetti-container pointer-events-none absolute inset-0 overflow-hidden">
+                            <div className="stamp-container pointer-events-none absolute top-8 right-8 z-10">
                                 <style>{`
-                                    @keyframes confetti-fall {
-                                        0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
-                                        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+                                    @keyframes stamp-appear {
+                                        0% { 
+                                            transform: scale(0) rotate(-15deg); 
+                                            opacity: 0; 
+                                        }
+                                        50% { 
+                                            transform: scale(1.2) rotate(-15deg); 
+                                        }
+                                        100% { 
+                                            transform: scale(1) rotate(-15deg); 
+                                            opacity: 1; 
+                                        }
                                     }
-                                    .confetti {
-                                        position: absolute;
-                                        width: 10px;
-                                        height: 10px;
-                                        animation: confetti-fall 3s linear infinite;
+                                    .stamp {
+                                        animation: stamp-appear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                                        animation-delay: 0.5s;
+                                        opacity: 0;
                                     }
                                 `}</style>
-                                {[...Array(20)].map((_, i) => (
-                                    <div
-                                        key={i}
-                                        className="confetti"
-                                        style={{
-                                            left: `${Math.random() * 100}%`,
-                                            backgroundColor: ['#fbbf24', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'][Math.floor(Math.random() * 5)],
-                                            animationDelay: `${Math.random() * 3}s`,
-                                            animationDuration: `${2 + Math.random() * 2}s`
-                                        }}
-                                    />
-                                ))}
+                                <div className="stamp relative">
+                                    {/* Tampon avec effet de rotation */}
+                                    <div className="relative flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 rounded-full border-8 border-emerald-500 bg-emerald-500/10 backdrop-blur-sm shadow-2xl">
+                                        {/* Texte du tampon */}
+                                        <div className="text-center">
+                                            <p className="text-xl sm:text-2xl font-black text-emerald-500 tracking-wider" style={{ fontFamily: 'Impact, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+                                                PEDIDO
+                                            </p>
+                                            <p className="text-xl sm:text-2xl font-black text-emerald-500 tracking-wider" style={{ fontFamily: 'Impact, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+                                                LISTO
+                                            </p>
+                                        </div>
+                                        {/* Effet de cercle extérieur */}
+                                        <div className="absolute inset-0 rounded-full border-4 border-emerald-400/50 animate-ping" style={{ animationDuration: '2s' }}></div>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
                         {(hasClientDetails || order.receipt_url) && (
-                            <div className="grid gap-3 sm:grid-cols-2">
+                            <div className="grid gap-4 sm:grid-cols-2 items-stretch">
                                 {hasClientDetails && (
-                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-sm border border-white/10">
+                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-5 backdrop-blur-sm border border-white/10 flex flex-col">
                                         <p className="text-xs font-bold uppercase tracking-wider text-white/50 mb-3">Informations client</p>
                                         <div className="space-y-2.5">
                                             {clientName && (
@@ -720,7 +749,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                     </div>
                                 )}
                                 {order.receipt_url && (
-                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-4 backdrop-blur-sm border border-white/10 flex flex-col h-full">
+                                    <div className="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 p-5 backdrop-blur-sm border border-white/10 flex flex-col">
                                         <p className="text-xs font-bold uppercase tracking-wider text-white/50 mb-3">Justificatif de paiement</p>
                                         <button
                                             type="button"
@@ -763,7 +792,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                         })();
 
                                         return (
-                                            <div key={item.id} className="group rounded-2xl bg-white/98 backdrop-blur-sm p-5 transition-all hover:bg-white hover:shadow-xl border border-white/20">
+                                            <div key={item.id} className="rounded-2xl bg-white p-5 border border-slate-200 shadow-sm">
                                                 <div className="flex items-center justify-between gap-4">
                                                     <div className="flex min-w-0 flex-1 items-center gap-4">
                                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 text-lg font-bold text-white shadow-lg">
@@ -818,63 +847,12 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                             </div>
                         </div>
 
-                        {/* Message contextuel selon le type de commande */}
-                        {isOrderCompleted && (
-                            <div className="rounded-xl bg-gradient-to-r from-emerald-500/20 to-green-500/20 p-4 border border-emerald-500/30 backdrop-blur-sm">
-                                <div className="flex items-start gap-3">
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/30">
-                                        {order.type_commande === 'livraison' ? (
-                                            <TruckIcon size={20} className="text-emerald-300" />
-                                        ) : (
-                                            <PackageCheck size={20} className="text-emerald-300" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-sm font-bold text-white">
-                                            {order.type_commande === 'livraison' 
-                                                ? "🚀 Votre commande est prête pour la livraison !" 
-                                                : "✅ Vous pouvez venir récupérer votre commande !"}
-                                        </p>
-                                        <p className="text-xs text-white/70 mt-1">
-                                            {order.type_commande === 'livraison' 
-                                                ? "Le livreur partira très bientôt vers votre adresse" 
-                                                : "Présentez-vous au comptoir avec votre numéro de commande"}
-                                        </p>
-                                        {clientAddress && order.type_commande === 'livraison' && (
-                                            <div className="mt-2 flex items-center gap-2 text-xs text-emerald-200">
-                                                <MapPin size={14} />
-                                                <span className="truncate">{clientAddress}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            {isOrderCompleted ? (
-                                <div className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-emerald-500/25 to-emerald-600/25 px-4 py-2.5 border border-emerald-500/30">
-                                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/30">
-                                        <CheckCircle size={14} className="text-emerald-300" />
-                                    </div>
-                                    <span className="text-sm font-bold text-emerald-200">Commande prête !</span>
-                                </div>
-                            ) : (
-                                <div className="inline-flex items-center gap-2.5 rounded-xl bg-white/5 px-4 py-2.5 border border-white/10">
-                                    <div className="h-2 w-2 animate-pulse rounded-full bg-amber-400"></div>
-                                    <span className="text-xs font-semibold uppercase tracking-wider text-white/70">En préparation</span>
-                                </div>
-                            )}
+                        <div className="flex justify-center">
                             <button
-                                onClick={isOrderCompleted ? onNewOrderClick : undefined}
-                                disabled={!isOrderCompleted}
-                                className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
-                                    isOrderCompleted
-                                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02]'
-                                        : 'cursor-not-allowed bg-white/5 text-white/30 border border-white/10'
-                                }`}
+                                onClick={onNewOrderClick}
+                                className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-base font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02]"
                             >
-                                {isOrderCompleted ? 'Nouvelle commande' : 'Patientez...'}
+                                Nouvelle commande
                             </button>
                         </div>
                     </div>
