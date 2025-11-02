@@ -7,6 +7,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        format: 'es',
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'chart-vendor': ['recharts'],
