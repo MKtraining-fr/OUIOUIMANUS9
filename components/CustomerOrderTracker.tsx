@@ -742,7 +742,7 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
                                                 </div>
                                                 <div>
                                                     <p className="text-xs text-white/60">Appelez le restaurant</p>
-                                                    <p className="text-sm font-bold">+57 323 809 0562</p>
+                                                    <p className="text-sm font-bold text-white">+57 323 809 0562</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -849,8 +849,13 @@ const CustomerOrderTracker: React.FC<CustomerOrderTrackerProps> = ({ orderId, on
 
                         <div className="flex justify-center">
                             <button
-                                onClick={onNewOrderClick}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-base font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02]"
+                                onClick={isOrderCompleted ? onNewOrderClick : undefined}
+                                disabled={!isOrderCompleted}
+                                className={`inline-flex items-center justify-center gap-2 rounded-xl px-8 py-3.5 text-base font-bold transition-all ${
+                                    isOrderCompleted
+                                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 hover:scale-[1.02] cursor-pointer'
+                                        : 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-60'
+                                }`}
                             >
                                 Nouvelle commande
                             </button>
